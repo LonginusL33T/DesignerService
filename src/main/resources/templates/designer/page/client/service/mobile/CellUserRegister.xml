@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="CellUserRegister" title="普通用户注册" path="branch"  jellyinject="client.service.mobile.CellUserRegister"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

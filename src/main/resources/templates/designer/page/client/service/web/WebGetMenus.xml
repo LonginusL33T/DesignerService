@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="WebGetMenus" title="获取用户权限" path="branch" checktoken="false"  jellyinject="client.service.web.WebGetMenus"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

@@ -1,0 +1,55 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.AcctUser
+import com.aolc.designer.MstFeedback
+import java.util.ArrayList
+import org.apache.cayenne.query.Ordering
+import org.apache.cayenne.query.SortOrder
+
+PAGE WebGetFeedBacks(title="获取反馈列表",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var pagesize = request.get("pagesize");
+        var pagenum = request.get("pagenum");
+        if(pagesize == null || StringUtils.isBlank(pagesize+"")){
+            pagesize = 10;
+        }else{
+            pagesize = Integer.parseInt(pagesize+"");
+        }
+        if(pagenum == null || StringUtils.isBlank(pagenum+"")){
+            pagenum = 0;
+        }else{
+            pagenum = Integer.parseInt(pagenum+"");
+        }
+        var sql = "1=1";
+        var String ejbsql = "select count(uniqueid) from MstFeedback u where 1=1";
+
+        var feedList = new ArrayList();
+        var orders = new ArrayList();
+        var order = new Ordering("createTime",SortOrder.DESCENDING);
+        orders.add(order);
+        var feedbacks = context.databaseLoader.getByConditionPagination(MstFeedback,sql,null,orders,pagesize as Integer,pagenum as Integer);
+        var count = context.databaseLoader.getQueryTotalCount(ejbsql);
+        for(feedback :feedbacks){
+            var feedMap = new HashMap();
+            feedMap.put("uniqueid",feedback.uniqueid);
+            var user = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid ='"+feedback.userUniqueid+"'");
+            feedMap.put("username",user.username);
+            feedMap.put("category",user.category);
+            feedMap.put("content",feedback.feedback);
+            feedMap.put("image1",context.getResourceUrl(feedback.image1));
+            feedMap.put("image2",context.getResourceUrl(feedback.image2));
+            feedMap.put("image3",context.getResourceUrl(feedback.image3));
+            feedMap.put("time",utils.toDateStringB(feedback.createTime));
+            feedList.add(feedMap);
+        }
+        result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        result.put(Constants.TOTAL_NUM,count);
+        result.put("feedbacks",feedList);
+        return result;
+    }
+}

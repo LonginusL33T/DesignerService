@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="WebGetPermissions" title="获取权限列表" checktoken="true"  jellyinject="client.service.web.WebGetPermissions"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

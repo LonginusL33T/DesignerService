@@ -1,0 +1,76 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import java.util.ArrayList
+import java.util.List
+import org.apache.cayenne.query.EJBQLQuery
+import com.aolc.designer.AcctUserPro
+import org.apache.cayenne.ObjectContext
+import cn.smartx.core.ds.database.DBService
+import com.aolc.designer.AcctUser
+
+PAGE WebGetDesigners(title="获取设计师列表",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var pagesize = request.get("pagesize");
+        var pagenum = request.get("pagenum");
+        var designType = request.get("design_type");
+        var type = request.get("type");
+        var query = request.get("query");
+        var String sql = "select u from DAcctUserPro u where 1=1";
+        var String ejbsql = "select count(uniqueid) from DAcctUserPro u where 1=1";
+
+        if(pagesize == null || StringUtils.isBlank(pagesize+"")){
+            pagesize = 10;
+        }else{
+            pagesize = Integer.parseInt(pagesize+"");
+        }
+        if(pagenum == null || StringUtils.isBlank(pagenum+"")){
+            pagenum = 0;
+        }else{
+            pagenum = Integer.parseInt(pagenum+"");
+        }
+        if(designType!=null && !StringUtils.isBlank(designType+"")){
+            sql +=" and u.designType ='"+designType+"'";
+            ejbsql +=" and u.designType ='"+designType+"'";
+        }
+        if(query != null ){
+            sql +=" and u.name like '%"+query+"%'";
+            ejbsql +=" and u.name like '%"+query+"%'";
+        }
+        if(type!=null && !StringUtils.isBlank(type+"")){
+            sql +=" and u.userUniqueid in ( select a.uniqueid from DAcctUser a where a.type='"+type+"' and a.upload =1)";
+            ejbsql += " and u.userUniqueid in ( select a.uniqueid from DAcctUser a where a.type='"+type+"' and a.upload =1)"
+        }else{
+            sql +=" and u.userUniqueid in ( select a.uniqueid from DAcctUser a where  a.upload =1)";
+            ejbsql += " and u.userUniqueid in ( select a.uniqueid from DAcctUser a where a.upload =1)"
+        }
+
+        var limit = (pagenum as Integer)*(pagesize as Integer);
+        //sql+=" limit "+limit+","+pagesize;
+        var EJBQLQuery ejbqlQuery = new EJBQLQuery(sql);
+        ejbqlQuery.setFetchLimit(pagesize as Integer);
+        ejbqlQuery.setFetchOffset(limit as Integer);
+        var ObjectContext objectContext = DBService.createDatabaseContext();
+        var List<AcctUserPro> users = objectContext.performQuery(ejbqlQuery);
+        var count = context.databaseLoader.getQueryTotalCount(ejbsql);
+        var usersList = new ArrayList();
+        for(user:users){
+            var loginuser = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid = '"+user.userUniqueid+"'");
+            var map = new HashMap();
+            map.put("uniqueid",user.userUniqueid);
+            map.put("name",user.name);
+            map.put("type",loginuser.type);
+            map.put("design_type",user.designType);
+            map.put("country",user.country);
+            usersList.add(map);
+        }
+        result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        result.put(Constants.USER,usersList);
+        result.put(Constants.TOTAL_NUM,count);
+        return result;
+    }
+}

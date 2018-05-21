@@ -1,0 +1,67 @@
+package client.service.mobile
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import java.util.ArrayList
+import com.aolc.designer.AcctUserPro
+import org.apache.cayenne.query.EJBQLQuery
+import org.apache.cayenne.ObjectContext
+import cn.smartx.core.ds.database.DBService
+import java.util.List
+
+PAGE CellSearchDesigners(title="搜索设计师",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var pageSize = request.get("page_size");
+        var pageNum = request.get("page_num");
+        var type = request.get("type");
+        var country = request.get("country");
+        var designType = request.get("design_type");
+        var query = request.get("query");
+        var sql = "select u from DAcctUserPro u where 1=1";
+        if(pageSize == null|| StringUtils.isBlank(pageSize+"")){
+            pageSize = 10;
+        }else{
+            pageSize = Integer.parseInt(pageSize+"");
+        }
+        if(pageNum == null || StringUtils.isBlank(pageNum+"")){
+            pageNum = 0;
+        }else{
+            pageNum = Integer.parseInt(pageNum+"");
+        }
+        if(type !=null && !StringUtils.isBlank(type+"")){
+            sql+=" and u.userUniqueid in (select t.uniqueid from DAcctUser t where t.type ='"+type+"' and t.status ='"+Constants.ACCEPT+"' and t.upload = 1 )"
+        }else{
+            sql += " and u.userUniqueid in(select t.uniqueid from DAcctUser t where t.status ='"+Constants.ACCEPT+"' and t.upload = 1)"
+        }
+        if(designType !=null && !StringUtils.isBlank(designType+"")){
+            sql+=" and u.designType ='"+designType+"'";
+        }
+        if(country != null && !StringUtils.isBlank(country+"")){
+            sql+=" and u.country = '"+country+"'";
+        }
+        if(query != null ){
+            sql+=" and (u.name like '%"+query+"%' or u.designType like '%"+query+"%')";
+        }
+        var limit = (pageNum as Integer)*(pageSize as Integer);
+        var EJBQLQuery ejbqlQuery = new EJBQLQuery(sql);
+        ejbqlQuery.setFetchLimit(pageSize as Integer);
+        ejbqlQuery.setFetchOffset(limit as Integer);
+        var ObjectContext objectContext = DBService.createDatabaseContext();
+        var List<AcctUserPro> users = objectContext.performQuery(ejbqlQuery);
+        var userPros = new ArrayList();
+        for(user:users){
+            var userPro = new HashMap();
+            userPro.put("uniqueid",user.userUniqueid);
+            userPro.put("name",user.name);
+            userPro.put("studio",user.agent);
+            userPro.put("avatar",context.getResourceThumbUrl(user.userBackground));
+            userPros.add(userPro);
+        }
+        result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        result.put(Constants.USER,userPros);
+        return result;
+    }
+}

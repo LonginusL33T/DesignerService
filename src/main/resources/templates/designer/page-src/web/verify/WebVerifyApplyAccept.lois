@@ -1,0 +1,58 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import java.util.ArrayList
+import java.util.List
+import com.aolc.designer.MstApplyMapping
+import com.aolc.designer.MstCompanyApplyMapping
+
+PAGE WebVerifyApplyAccept(title="应聘信息审核通过",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var uniqueid = request.get("uniqueid");
+        var category = request.get("category");
+        if(category == null || StringUtils.isBlank(category+"")){
+            category = Constants.USER;
+        }
+        if(uniqueid ==null || StringUtils.isBlank(uniqueid+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            if(Constants.APPLY == category){
+                if(uniqueid instanceof List){
+                    for(var i =0;i<uniqueid.length;i++){
+                        var item = uniqueid.get(i);
+                        var apply = context.databaseLoader.getEntityByCondition(MstCompanyApplyMapping,"uniqueid = '"+item+"'");
+                        apply.status = Constants.ACCEPT;
+                    }
+                    context.submit;
+                    result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+                }else{
+                    var apply = context.databaseLoader.getEntityByCondition(MstCompanyApplyMapping,"uniqueid = '"+uniqueid+"'");
+                    apply.status = Constants.ACCEPT;
+                    context.submit;
+                    result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+                }
+            }else{
+                if(uniqueid instanceof List){
+                    for(var i =0;i<uniqueid.length;i++){
+                        var item = uniqueid.get(i);
+                        var apply = context.databaseLoader.getEntityByCondition(MstApplyMapping,"uniqueid = '"+item+"'");
+                        apply.status = Constants.ACCEPT;
+                    }
+                    context.submit;
+                    result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+                }else{
+                    var apply = context.databaseLoader.getEntityByCondition(MstApplyMapping,"uniqueid = '"+uniqueid+"'");
+                    apply.status = Constants.ACCEPT;
+                    context.submit;
+                    result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+                }
+            }
+        }
+        return result;
+    }
+}

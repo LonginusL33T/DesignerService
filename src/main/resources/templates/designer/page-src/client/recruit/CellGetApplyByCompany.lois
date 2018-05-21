@@ -1,0 +1,63 @@
+package client.service.mobile
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import java.util.ArrayList
+import org.apache.cayenne.query.Ordering
+import org.apache.cayenne.query.SortOrder
+import com.aolc.designer.MstRecruit
+import com.aolc.designer.MstApplyMapping
+import com.aolc.designer.AcctUser
+import com.aolc.designer.AcctUserPro
+
+PAGE CellGetApplyByCompany(title="获取应聘人员",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var pagesize = request.get("pagesize");
+        var pagenum = request.get("pagenum");
+        var jobId = request.get("uniqueid");
+        if(pagesize == null || StringUtils.isBlank(pagesize+"")){
+            pagesize = 10;
+        }else{
+            pagesize = Integer.parseInt(pagesize+"");
+        }
+        if(pagenum == null || StringUtils.isBlank(pagenum+"")){
+            pagenum = 0;
+        }else{
+            pagenum = Integer.parseInt(pagenum+"");
+        }
+        if(jobId == null
+                ||StringUtils.isBlank(jobId+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var sql = "jobUniqueid = '"+jobId+"' and status ='"+Constants.ACCEPT+"'";
+            var String ejbsql = "select count(uniqueid) from MstApplyMapping u where u.jobUniqueid='"+jobId+"' and u.status ='"+Constants.ACCEPT+"'";
+
+            var applyUsers = new ArrayList();
+            var orders = new ArrayList();
+            var order = new Ordering("createTime",SortOrder.DESCENDING);
+            orders.add(order);
+            var applys = context.databaseLoader.getByConditionPagination(MstApplyMapping,sql,null,orders,pagesize as Integer,pagenum as Integer);
+            var count = context.databaseLoader.getQueryTotalCount(ejbsql);
+            for(apply :applys){
+                var applyMap = new HashMap();
+                var user = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid = '"+apply.userUniqueid+"'");
+                var userPro = context.databaseLoader.getEntityByCondition(AcctUserPro,"userUniqueid = '"+apply.userUniqueid+"'");
+                applyMap.put("uniqueid",apply.userUniqueid);
+                applyMap.put("upload",user.upload);
+                applyMap.put("avatar",context.getResourceThumbUrl(user.avatar));
+                applyMap.put("username",userPro.name);
+                applyMap.put("status",apply.status);
+                applyMap.put("time",utils.toDateString(apply.createTime));
+                applyUsers.add(applyMap);
+            }
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+            result.put(Constants.TOTAL_NUM,count);
+            result.put("apply",applyUsers);
+        }
+        return result;
+    }
+}

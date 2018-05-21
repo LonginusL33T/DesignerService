@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="WebGetAdvertisement" title="获取广告信息" path="branch"  jellyinject="client.service.web.WebGetAdvertisement"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

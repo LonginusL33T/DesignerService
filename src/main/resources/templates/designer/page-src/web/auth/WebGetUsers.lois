@@ -1,0 +1,51 @@
+package client.service.web
+
+import cn.smartx.core.model.akka.JellyInjectAkka
+import java.util.HashMap
+import cn.smartx.core.AAA.SmartxSecurityManager
+import java.util.ArrayList
+import cn.smartx.core.model.entity.AcctUser
+import org.apache.commons.lang3.StringUtils
+import com.aolc.designer.utils.Constants
+import cn.smartx.core.model.JellyInjectBase
+
+PAGE WebGetUsers(title="获取用户列表", checktoken="true") extends JellyInjectBase{
+	EVENT SERVICE{
+		var current = request.get("current");
+		var pageSize = request.get("pageSize");
+		var query = request.get("query");
+		var userService = SmartxSecurityManager.getInstance.getUserService(context.appCode);
+		var where ="appcode='"+context.appCode+"'";
+		var countWhere = "select count(user) from AcctUser user where user.appcode = '"+context.appCode+"'";
+		if(query!=null&&!StringUtils.isBlank(query+"")){
+			where ="appcode='"+context.appCode+"' and name like '%"+query+"%'";
+			countWhere = "select count(user) from AcctUser user where user.appcode = '"+context.appCode+"' and user.name like '%"+query+"%'";
+		}
+		var users =  context.databaseLoader.getByConditionPagination(AcctUser,where,null,null,Integer.parseInt(pageSize+""),Integer.parseInt(current+""));
+		var result = new HashMap();
+		var ArrayList userList = new ArrayList();
+		for(user:users){
+			var HashMap map = new HashMap();
+			map.put("sid",user.getSid());
+			map.put("name",user.getName());
+			map.put("loginname",user.getLoginname());
+			map.put("locked",user.getLocked());
+			//角色
+			var roleString = "";
+			var roleList = userService.findRoles(user.getLoginname());
+			for(role : roleList){
+				roleString += role.getName() + " ";
+			}
+			map.put("role",roleString);
+			//部门
+			userList.add(map);
+		}
+		var total = context.databaseLoader.getQueryTotalCount(countWhere);
+		result.put("users",userList);
+		result.put("total",total);
+		result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+		return result;
+
+	}
+	
+}

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="CellTop100Designers" title="Top100设计师" path="branch"  jellyinject="client.service.mobile.CellTop100Designers"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

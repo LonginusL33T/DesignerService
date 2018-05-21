@@ -1,0 +1,43 @@
+package client.service.mobile
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.AcctUser
+import org.apache.cayenne.query.Ordering
+import org.apache.cayenne.query.SortOrder
+import java.util.ArrayList
+import com.aolc.designer.AcctUserPro
+
+PAGE CellTop100Designers(title="Top100设计师",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var pageSize = request.get("page_size");
+        var pageNum = request.get("page_num");
+        if(pageSize==null
+                ||pageNum == null
+                ||StringUtils.isBlank(pageSize+"")
+                ||StringUtils.isBlank(pageNum+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var orders = new ArrayList();
+            orders.add(new Ordering("verifyTime",SortOrder.DESCENDING));
+            var users =  context.databaseLoader.getByConditionPagination(AcctUser,"upload = 1 and category='"+Constants.USER+"'",null,orders,Integer.parseInt(pageSize+""),Integer.parseInt(pageNum+""));
+            var userPros = new ArrayList();
+            for(user:users){
+                var userPro = new HashMap();
+                var userInfo = context.databaseLoader.getEntityByCondition(AcctUserPro,"userUniqueid ='"+user.uniqueid+"'");
+                userPro.put("uniqueid",user.uniqueid);
+                userPro.put("name",userInfo.name);
+                userPro.put("studio",userInfo.agent);
+                userPro.put("avatar",context.getResourceThumbUrl(user.avatar));
+                userPros.add(userPro);
+            }
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+            result.put(Constants.USER,userPros);
+        }
+        return result;
+    }
+}

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="WebUploadUserInfo" title="上传用户信息" path="branch"  jellyinject="client.service.web.WebUploadUserInfo"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

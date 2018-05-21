@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<domain project-version="6">
+	<map name="designer"/>
+	<map name="smartxcore"/>
+	<map name="workflow"/>
+
+	<node name="designer"
+		 factory="org.apache.cayenne.configuration.server.XMLPoolingDataSourceFactory"
+		 schema-update-strategy="org.apache.cayenne.access.dbsync.SkipSchemaUpdateStrategy"
+		>
+		<map-ref name="designer"/>
+		<data-source>
+			<driver value="com.mysql.jdbc.Driver"/>
+			<url value="jdbc:mysql://localhost:3306/designer?useUnicode=true&amp;characterEncoding=UTF-8"/>
+			<connectionPool min="1" max="15"/>
+			<!--<login userName="root" password="sunfly123"/>-->
+			<login userName="root" password="123456"/>
+		</data-source>
+	</node>
+	<node name="smartxcore"
+		 factory="org.apache.cayenne.configuration.server.XMLPoolingDataSourceFactory"
+		 schema-update-strategy="org.apache.cayenne.access.dbsync.SkipSchemaUpdateStrategy"
+		>
+		<map-ref name="smartxcore"/>
+		<data-source>
+			<driver value="com.mysql.jdbc.Driver"/>
+			<url value="jdbc:mysql://localhost:3306/smartx_designer?useUnicode=true&amp;characterEncoding=UTF-8"/>
+			<connectionPool min="1" max="150"/>
+			<login userName="root" password="123456"/>
+		</data-source>
+	</node>
+	<node name="workflow"
+		 factory="org.apache.cayenne.configuration.server.XMLPoolingDataSourceFactory"
+		 schema-update-strategy="org.apache.cayenne.access.dbsync.SkipSchemaUpdateStrategy"
+		>
+		<map-ref name="workflow"/>
+		<data-source>
+			<driver value="com.mysql.jdbc.Driver"/>
+			<url value="jdbc:mysql://localhost:3306/smartx_designer?useUnicode=true&amp;characterEncoding=UTF-8"/>
+			<connectionPool min="1" max="15"/>
+			<login userName="root" password="123456"/>
+		</data-source>
+	</node>
+</domain>

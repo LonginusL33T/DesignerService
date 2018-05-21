@@ -1,0 +1,35 @@
+package client.service.web
+
+import cn.smartx.core.AAA.SmartxSecurityManager
+import cn.smartx.core.AAA.model.Role
+import java.util.HashMap
+import java.util.List
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.utils.Utils
+import cn.smartx.core.model.JellyInjectBase
+
+PAGE WebAddRole(title="添加角色", checktoken="true")  extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var name = request.get("roleName") as String;
+        var permissions = request.get("permissions") as List;
+        var roleService = SmartxSecurityManager.getInstance.getRoleService(context.appCode)
+        var loader = context.databaseLoader;
+        var role = new Role();
+        role.setAppcode(context.appCode);
+        role.setName(name);
+        role.setMemo(name);
+        var roleDb = roleService.createRole(role);
+        if(permissions!=null && permissions.size>0){
+            if(SmartxSecurityManager.getInstance.getRoleService(context.appCode).addPermissions(roleDb,Utils.getPermissionsByIds(loader,permissions))) {
+                result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+            }else{
+                result.put(Constants.ERROR_CODE,Constants.ERROR_ADD_PERMISSION_ERROR);
+                result.put(Constants.MESSAGE,i18n.get("add_permission_error"));
+            }
+        }else{
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS)
+        }
+        return result;
+    }
+}

@@ -1,0 +1,25 @@
+package client.service.mobile
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.AcctUser
+
+PAGE CellAvatarUpdate(title="更新用户头像",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var uniqueid = session.getAttribute("uniqueid");
+        var avatar = request.get(Constants.AVATAR);
+        if(uniqueid == null || StringUtils.isBlank(uniqueid+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var user = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid ='"+uniqueid+"'");
+            user.avatar = avatar+"";
+            context.submit;
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        }
+        return result;
+    }
+}

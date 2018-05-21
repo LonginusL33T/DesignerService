@@ -1,0 +1,31 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import java.util.HashMap
+import com.aolc.designer.MstAdvertisement
+import java.util.ArrayList
+import org.apache.cayenne.query.Ordering
+import org.apache.cayenne.query.SortOrder
+import com.aolc.designer.utils.Constants
+
+PAGE WebGetAdvertisement(title="获取广告信息",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var orders = new ArrayList();
+        var order = new Ordering("time",SortOrder.DESCENDING);
+        orders.add(order);
+        var advert = new HashMap();
+        var adverts = context.databaseLoader.getByConditionPagination(MstAdvertisement,"1=1",null,orders,1,0);
+        if(adverts == null || adverts.size==0){
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+            result.put("advert",advert);
+        }else{
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+            var temp = adverts.get(0);
+            advert.put("name",temp.name);
+            advert.put("source",context.getResourceUrl(temp.source));
+            result.put("advert",advert);
+        }
+        return result;
+    }
+}

@@ -1,0 +1,71 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.AcctUser
+import java.util.ArrayList
+import org.apache.cayenne.query.Ordering
+import org.apache.cayenne.query.SortOrder
+import com.aolc.designer.AcctUserCompany
+import com.aolc.designer.AcctUserPro
+
+PAGE WebVerifyApplyUsers(title="应聘信息审核用户列表",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var category = request.get("category");
+        var pagesize = request.get("pagesize");
+        var pagenum = request.get("pagenum");
+        
+        if(pagesize==null||StringUtils.isBlank(pagesize+"")){
+            pagesize = 10;
+        }else{
+            pagesize = Integer.parseInt(pagesize+"");
+        }
+        if(pagenum == null || StringUtils.isBlank(pagenum+" ")){
+            pagenum = 0;
+        }else{
+            pagenum = Integer.parseInt(pagenum+"");
+        }
+        var sql = "1=1 and status = '"+Constants.ACCEPT+"'";
+        var ejbsql = "select count(uniqueid) from DAcctUser user where 1=1 and user.status = '"+Constants.ACCEPT+"'"
+        if(category!=null&&!StringUtils.isBlank(category+"")){
+            sql += " and category = '"+category+"'";
+            ejbsql += " and user.category = '"+category+"'";
+        }
+
+        var count = context.databaseLoader.getQueryTotalCount(ejbsql);
+
+        var orderings = new ArrayList();
+
+        orderings.add(new Ordering("createTime",SortOrder.DESCENDING));
+        var users = context.databaseLoader.getByConditionPagination(AcctUser,sql,null,orderings,pagesize as Integer,pagenum as Integer);
+        var userResult = new ArrayList();
+        for(user : users){
+            var userMap = new HashMap();
+            if(Constants.COMPANY==user.category){
+                var company = context.databaseLoader.getEntityByCondition(AcctUserCompany,"userUniqueid = '"+user.uniqueid+"'")
+                userMap.put("name",company.name);
+                userMap.put("brand_name",company.brandName);
+                userMap.put("contact_telephone",company.connectTelephone);
+                userMap.put("email",company.email);
+            }else{
+                var userInfo = context.databaseLoader.getEntityByCondition(AcctUserPro,"userUniqueid = '"+user.uniqueid+"'")
+                userMap.put("name",userInfo.name);
+                userMap.put("brand_name",userInfo.brandName);
+                userMap.put("contact_telephone",userInfo.telephone);
+                userMap.put("email",userInfo.email);
+            }
+            userMap.put("uniqueid",user.uniqueid);
+            userMap.put("category",user.category);
+            userMap.put("status",user.status);
+            userMap.put("avatar",context.getResourceUrl(user.avatar));
+            userResult.add(userMap);
+        }
+        result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        result.put(Constants.USER,userResult);
+        result.put(Constants.TOTAL_NUM,count);
+        return result;
+    }
+}

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="WebGetFeedBacks" title="获取反馈列表" path="branch"  jellyinject="client.service.web.WebGetFeedBacks"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

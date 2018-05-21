@@ -1,0 +1,23 @@
+package client.service.web
+
+import java.util.HashMap
+import cn.smartx.core.AAA.SmartxSecurityManager
+import com.aolc.designer.utils.Constants
+import cn.smartx.core.model.JellyInjectBase
+
+PAGE WebLockOrUnLockUser(title="锁定/解锁用户", checktoken="true") extends JellyInjectBase{
+	EVENT SERVICE{
+		var loginname = request.get("loginname") as String;
+		var userService = SmartxSecurityManager.getInstance.getUserService(context.appCode);
+		var user = userService.findByUsername(loginname);
+		if(user.locked==0){
+			userService.lock(user);
+		}else{
+			userService.unlock(user);
+		}
+		var result = new HashMap();
+		result.put(Constants.ERROR_CODE,Constants.SUCCESS)
+		return result;
+	}
+	
+}

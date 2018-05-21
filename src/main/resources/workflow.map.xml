@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-map xmlns="http://cayenne.apache.org/schema/3.0/modelMap"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://cayenne.apache.org/schema/3.0/modelMap http://cayenne.apache.org/schema/3.0/modelMap.xsd"
+	 project-version="6">
+	<property name="defaultPackage" value="cn.smartx.core.model.entity"/>
+	<db-entity name="wf_approve_data" catalog="smartx_designer">
+		<db-attribute name="approvedate" type="VARCHAR" length="200"/>
+		<db-attribute name="approvename" type="VARCHAR" length="100"/>
+		<db-attribute name="approveusername" type="VARCHAR" length="200"/>
+		<db-attribute name="attr1" type="VARCHAR" length="200"/>
+		<db-attribute name="attr2" type="VARCHAR" length="200"/>
+		<db-attribute name="remark" type="VARCHAR" length="2000"/>
+		<db-attribute name="results" type="VARCHAR" length="100"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="taskid" type="INTEGER" isMandatory="true" length="10"/>
+		<db-attribute name="visible" type="INTEGER" length="10"/>
+		<db-attribute name="wfdid" type="INTEGER" length="10"/>
+	</db-entity>
+	<db-entity name="wf_instance" catalog="smartx_designer">
+		<db-attribute name="appcode" type="VARCHAR" length="128"/>
+		<db-attribute name="appstatus" type="VARCHAR" length="128"/>
+		<db-attribute name="createdate" type="DATE" length="10"/>
+		<db-attribute name="creator" type="VARCHAR" length="100"/>
+		<db-attribute name="creatordept" type="VARCHAR" length="100"/>
+		<db-attribute name="datapagetype" type="VARCHAR" length="100"/>
+		<db-attribute name="datapageurl" type="VARCHAR" length="400"/>
+		<db-attribute name="finishdate" type="DATE" length="10"/>
+		<db-attribute name="flowchart" type="VARCHAR" length="400"/>
+		<db-attribute name="memo" type="VARCHAR" length="600"/>
+		<db-attribute name="name" type="VARCHAR" length="512"/>
+		<db-attribute name="refcode" type="VARCHAR" length="100"/>
+		<db-attribute name="refid" type="INTEGER" length="10"/>
+		<db-attribute name="refvalue" type="VARCHAR" length="400"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="status" type="VARCHAR" length="32"/>
+		<db-attribute name="timeoutflag" type="INTEGER" length="10"/>
+		<db-attribute name="timeoutstart" type="DATE" length="10"/>
+		<db-attribute name="timerequire" type="INTEGER" length="10"/>
+		<db-attribute name="wfid" type="INTEGER" length="10"/>
+		<db-attribute name="wfseq" type="VARCHAR" length="100"/>
+	</db-entity>
+	<db-entity name="wf_role" catalog="smartx_designer">
+		<db-attribute name="name" type="VARCHAR" length="100"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="wfid" type="INTEGER" length="10"/>
+	</db-entity>
+	<db-entity name="wf_role_mapping" catalog="smartx_designer">
+		<db-attribute name="attr1" type="VARCHAR" length="100"/>
+		<db-attribute name="attr2" type="VARCHAR" length="100"/>
+		<db-attribute name="attr3" type="INTEGER" length="10"/>
+		<db-attribute name="deptid" type="VARCHAR" length="100"/>
+		<db-attribute name="maptype" type="INTEGER" length="10"/>
+		<db-attribute name="positionid" type="VARCHAR" length="100"/>
+		<db-attribute name="roleid" type="INTEGER" length="10"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="userid" type="VARCHAR" length="100"/>
+	</db-entity>
+	<db-entity name="wf_task" catalog="smartx_designer">
+		<db-attribute name="assigndate" type="DATE" length="10"/>
+		<db-attribute name="exeuserid" type="VARCHAR" length="100"/>
+		<db-attribute name="finishdate" type="DATE" length="10"/>
+		<db-attribute name="flowstatus" type="VARCHAR" length="100"/>
+		<db-attribute name="isopened" type="INTEGER" length="10"/>
+		<db-attribute name="memo" type="VARCHAR" length="600"/>
+		<db-attribute name="name" type="VARCHAR" length="200"/>
+		<db-attribute name="pagetype" type="VARCHAR" length="100"/>
+		<db-attribute name="pageurl" type="VARCHAR" length="400"/>
+		<db-attribute name="pretaskid" type="INTEGER" length="10"/>
+		<db-attribute name="refcode" type="VARCHAR" length="100"/>
+		<db-attribute name="refid" type="INTEGER" length="10"/>
+		<db-attribute name="refvalue" type="VARCHAR" length="400"/>
+		<db-attribute name="role" type="VARCHAR" length="100"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="startdate" type="DATE" length="10"/>
+		<db-attribute name="status" type="VARCHAR" length="32"/>
+		<db-attribute name="taskseq" type="INTEGER" length="10"/>
+		<db-attribute name="tasktype" type="VARCHAR" length="100"/>
+		<db-attribute name="timerequire" type="INTEGER" length="10"/>
+		<db-attribute name="title" type="VARCHAR" length="200"/>
+		<db-attribute name="userid" type="VARCHAR" length="100"/>
+		<db-attribute name="wfdid" type="INTEGER" length="10"/>
+	</db-entity>
+	<db-entity name="wf_workflow" catalog="smartx_designer">
+		<db-attribute name="admin" type="VARCHAR" length="100"/>
+		<db-attribute name="admindept" type="VARCHAR" length="100"/>
+		<db-attribute name="appcode" type="VARCHAR" length="128"/>
+		<db-attribute name="biztype" type="VARCHAR" length="100"/>
+		<db-attribute name="code" type="VARCHAR" length="64"/>
+		<db-attribute name="datapagetype" type="VARCHAR" length="100"/>
+		<db-attribute name="datapageurl" type="VARCHAR" length="400"/>
+		<db-attribute name="memo" type="VARCHAR" length="600"/>
+		<db-attribute name="name" type="VARCHAR" length="100"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="specification" type="VARCHAR" length="100"/>
+		<db-attribute name="template" type="VARCHAR" length="256"/>
+		<db-attribute name="validated" type="VARCHAR" length="10"/>
+	</db-entity>
+	<obj-entity name="WfApproveData" className="cn.smartx.core.model.entity.WfApproveData" dbEntityName="wf_approve_data">
+		<obj-attribute name="approvedate" type="java.lang.String" db-attribute-path="approvedate"/>
+		<obj-attribute name="approvename" type="java.lang.String" db-attribute-path="approvename"/>
+		<obj-attribute name="approveusername" type="java.lang.String" db-attribute-path="approveusername"/>
+		<obj-attribute name="attr1" type="java.lang.String" db-attribute-path="attr1"/>
+		<obj-attribute name="attr2" type="java.lang.String" db-attribute-path="attr2"/>
+		<obj-attribute name="remark" type="java.lang.String" db-attribute-path="remark"/>
+		<obj-attribute name="results" type="java.lang.String" db-attribute-path="results"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+		<obj-attribute name="visible" type="java.lang.Integer" db-attribute-path="visible"/>
+		<obj-attribute name="wfdid" type="java.lang.Integer" db-attribute-path="wfdid"/>
+	</obj-entity>
+	<obj-entity name="WfInstance" className="cn.smartx.core.model.entity.WfInstance" dbEntityName="wf_instance">
+		<obj-attribute name="appcode" type="java.lang.String" db-attribute-path="appcode"/>
+		<obj-attribute name="appstatus" type="java.lang.String" db-attribute-path="appstatus"/>
+		<obj-attribute name="createdate" type="java.util.Date" db-attribute-path="createdate"/>
+		<obj-attribute name="creator" type="java.lang.String" db-attribute-path="creator"/>
+		<obj-attribute name="creatordept" type="java.lang.String" db-attribute-path="creatordept"/>
+		<obj-attribute name="datapagetype" type="java.lang.String" db-attribute-path="datapagetype"/>
+		<obj-attribute name="datapageurl" type="java.lang.String" db-attribute-path="datapageurl"/>
+		<obj-attribute name="finishdate" type="java.util.Date" db-attribute-path="finishdate"/>
+		<obj-attribute name="flowchart" type="java.lang.String" db-attribute-path="flowchart"/>
+		<obj-attribute name="memo" type="java.lang.String" db-attribute-path="memo"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="refcode" type="java.lang.String" db-attribute-path="refcode"/>
+		<obj-attribute name="refid" type="java.lang.Integer" db-attribute-path="refid"/>
+		<obj-attribute name="refvalue" type="java.lang.String" db-attribute-path="refvalue"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+		<obj-attribute name="status" type="java.lang.String" db-attribute-path="status"/>
+		<obj-attribute name="timeoutflag" type="java.lang.Integer" db-attribute-path="timeoutflag"/>
+		<obj-attribute name="timeoutstart" type="java.util.Date" db-attribute-path="timeoutstart"/>
+		<obj-attribute name="timerequire" type="java.lang.Integer" db-attribute-path="timerequire"/>
+		<obj-attribute name="wfseq" type="java.lang.String" db-attribute-path="wfseq"/>
+	</obj-entity>
+	<obj-entity name="WfRole" className="cn.smartx.core.model.entity.WfRole" dbEntityName="wf_role">
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+	</obj-entity>
+	<obj-entity name="WfRoleMapping" className="cn.smartx.core.model.entity.WfRoleMapping" dbEntityName="wf_role_mapping">
+		<obj-attribute name="attr1" type="java.lang.String" db-attribute-path="attr1"/>
+		<obj-attribute name="attr2" type="java.lang.String" db-attribute-path="attr2"/>
+		<obj-attribute name="attr3" type="java.lang.Integer" db-attribute-path="attr3"/>
+		<obj-attribute name="deptid" type="java.lang.String" db-attribute-path="deptid"/>
+		<obj-attribute name="maptype" type="java.lang.Integer" db-attribute-path="maptype"/>
+		<obj-attribute name="positionid" type="java.lang.String" db-attribute-path="positionid"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+		<obj-attribute name="userid" type="java.lang.String" db-attribute-path="userid"/>
+	</obj-entity>
+	<obj-entity name="WfTask" className="cn.smartx.core.model.entity.WfTask" dbEntityName="wf_task">
+		<obj-attribute name="assigndate" type="java.util.Date" db-attribute-path="assigndate"/>
+		<obj-attribute name="exeuserid" type="java.lang.String" db-attribute-path="exeuserid"/>
+		<obj-attribute name="finishdate" type="java.util.Date" db-attribute-path="finishdate"/>
+		<obj-attribute name="flowstatus" type="java.lang.String" db-attribute-path="flowstatus"/>
+		<obj-attribute name="isopened" type="java.lang.Integer" db-attribute-path="isopened"/>
+		<obj-attribute name="memo" type="java.lang.String" db-attribute-path="memo"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="pagetype" type="java.lang.String" db-attribute-path="pagetype"/>
+		<obj-attribute name="pageurl" type="java.lang.String" db-attribute-path="pageurl"/>
+		<obj-attribute name="pretaskid" type="java.lang.Integer" db-attribute-path="pretaskid"/>
+		<obj-attribute name="refcode" type="java.lang.String" db-attribute-path="refcode"/>
+		<obj-attribute name="refid" type="java.lang.Integer" db-attribute-path="refid"/>
+		<obj-attribute name="refvalue" type="java.lang.String" db-attribute-path="refvalue"/>
+		<obj-attribute name="role" type="java.lang.String" db-attribute-path="role"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+		<obj-attribute name="startdate" type="java.util.Date" db-attribute-path="startdate"/>
+		<obj-attribute name="status" type="java.lang.String" db-attribute-path="status"/>
+		<obj-attribute name="taskseq" type="java.lang.Integer" db-attribute-path="taskseq"/>
+		<obj-attribute name="tasktype" type="java.lang.String" db-attribute-path="tasktype"/>
+		<obj-attribute name="timerequire" type="java.lang.Integer" db-attribute-path="timerequire"/>
+		<obj-attribute name="title" type="java.lang.String" db-attribute-path="title"/>
+		<obj-attribute name="userid" type="java.lang.String" db-attribute-path="userid"/>
+	</obj-entity>
+	<obj-entity name="WfWorkflow" className="cn.smartx.core.model.entity.WfWorkflow" dbEntityName="wf_workflow">
+		<obj-attribute name="admin" type="java.lang.String" db-attribute-path="admin"/>
+		<obj-attribute name="admindept" type="java.lang.String" db-attribute-path="admindept"/>
+		<obj-attribute name="appcode" type="java.lang.String" db-attribute-path="appcode"/>
+		<obj-attribute name="biztype" type="java.lang.String" db-attribute-path="biztype"/>
+		<obj-attribute name="code" type="java.lang.String" db-attribute-path="code"/>
+		<obj-attribute name="datapagetype" type="java.lang.String" db-attribute-path="datapagetype"/>
+		<obj-attribute name="datapageurl" type="java.lang.String" db-attribute-path="datapageurl"/>
+		<obj-attribute name="memo" type="java.lang.String" db-attribute-path="memo"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+		<obj-attribute name="specification" type="java.lang.String" db-attribute-path="specification"/>
+		<obj-attribute name="template" type="java.lang.String" db-attribute-path="template"/>
+		<obj-attribute name="validated" type="java.lang.String" db-attribute-path="validated"/>
+	</obj-entity>
+	<db-relationship name="toWfTask" source="wf_approve_data" target="wf_task" toMany="false">
+		<db-attribute-pair source="taskid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="toWfWorkflow" source="wf_instance" target="wf_workflow" toMany="false">
+		<db-attribute-pair source="wfid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="wfTaskArray" source="wf_instance" target="wf_task" toMany="true">
+		<db-attribute-pair source="sid" target="wfdid"/>
+	</db-relationship>
+	<db-relationship name="toWfWorkflow" source="wf_role" target="wf_workflow" toMany="false">
+		<db-attribute-pair source="wfid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="wfRoleMappingArray" source="wf_role" target="wf_role_mapping" toMany="true">
+		<db-attribute-pair source="sid" target="roleid"/>
+	</db-relationship>
+	<db-relationship name="toWfRole" source="wf_role_mapping" target="wf_role" toMany="false">
+		<db-attribute-pair source="roleid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="toWfInstance" source="wf_task" target="wf_instance" toMany="false">
+		<db-attribute-pair source="wfdid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="wfApproveDataArray" source="wf_task" target="wf_approve_data" toMany="true">
+		<db-attribute-pair source="sid" target="taskid"/>
+	</db-relationship>
+	<db-relationship name="wfInstanceArray" source="wf_workflow" target="wf_instance" toMany="true">
+		<db-attribute-pair source="sid" target="wfid"/>
+	</db-relationship>
+	<db-relationship name="wfRoleArray" source="wf_workflow" target="wf_role" toMany="true">
+		<db-attribute-pair source="sid" target="wfid"/>
+	</db-relationship>
+	<obj-relationship name="toWfTask" source="WfApproveData" target="WfTask" deleteRule="Nullify" db-relationship-path="toWfTask"/>
+	<obj-relationship name="toWfWorkflow" source="WfInstance" target="WfWorkflow" deleteRule="Nullify" db-relationship-path="toWfWorkflow"/>
+	<obj-relationship name="wfTaskArray" source="WfInstance" target="WfTask" deleteRule="Deny" db-relationship-path="wfTaskArray"/>
+	<obj-relationship name="toWfWorkflow" source="WfRole" target="WfWorkflow" deleteRule="Nullify" db-relationship-path="toWfWorkflow"/>
+	<obj-relationship name="wfRoleMappingArray" source="WfRole" target="WfRoleMapping" deleteRule="Deny" db-relationship-path="wfRoleMappingArray"/>
+	<obj-relationship name="toWfRole" source="WfRoleMapping" target="WfRole" deleteRule="Nullify" db-relationship-path="toWfRole"/>
+	<obj-relationship name="toWfInstance" source="WfTask" target="WfInstance" deleteRule="Nullify" db-relationship-path="toWfInstance"/>
+	<obj-relationship name="wfApproveDataArray" source="WfTask" target="WfApproveData" deleteRule="Deny" db-relationship-path="wfApproveDataArray"/>
+	<obj-relationship name="wfInstanceArray" source="WfWorkflow" target="WfInstance" deleteRule="Deny" db-relationship-path="wfInstanceArray"/>
+	<obj-relationship name="wfRoleArray" source="WfWorkflow" target="WfRole" deleteRule="Deny" db-relationship-path="wfRoleArray"/>
+</data-map>

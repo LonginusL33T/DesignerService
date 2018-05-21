@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="WebLogin" title="用户登录" path="branch" checktoken="false"  jellyinject="client.service.web.WebLogin"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="WebDeleteRole" title="删除角色" checktoken="true"  jellyinject="client.service.web.WebDeleteRole"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

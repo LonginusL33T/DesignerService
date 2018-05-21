@@ -1,0 +1,37 @@
+package client.service.web
+
+import cn.smartx.core.AAA.SmartxSecurityManager
+import java.util.HashMap
+import java.util.List
+import cn.smartx.core.model.JellyInjectBase
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.utils.Utils
+
+PAGE WebUpdateRole(title="修改角色", checktoken="true") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var name = request.get("roleName") as String;
+        var permissions = request.get("permissions") as List;
+        var roleSid = request.get("roleSid");
+        var roleService = SmartxSecurityManager.getInstance.getRoleService(context.appCode)
+        var role = roleService.findRoleBySid(Integer.parseInt(roleSid+""));
+        var rolePermissions = roleService.getPermissions(role);
+        var loader = context.databaseLoader;
+        role.setName(name);
+        role.setMemo(name);
+        roleService.updateRole(role);
+        roleService.removePermissions(role,rolePermissions);
+        if(permissions!=null && permissions.size>0){
+            if(roleService.addPermissions(role,Utils.getPermissionsByIds(loader,permissions))) {
+                result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+            }else{
+                result.put(Constants.ERROR_CODE,Constants.ERROR_ADD_PERMISSION_ERROR);
+                result.put(Constants.MESSAGE,Constants.ERROR_ADD_PERMISSION_ERROR);
+
+            }
+        }else{
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS)
+        }
+        return result;
+    }
+}

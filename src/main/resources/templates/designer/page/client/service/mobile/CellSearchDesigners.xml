@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="CellSearchDesigners" title="搜索设计师" path="branch"  jellyinject="client.service.mobile.CellSearchDesigners"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

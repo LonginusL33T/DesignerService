@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="CellSendApplyByCompany" title="约面试" path="branch"  jellyinject="client.service.mobile.CellSendApplyByCompany"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

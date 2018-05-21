@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="WebDeleteDesigner" title="删除设计师" path="branch"  jellyinject="client.service.web.WebDeleteDesigner"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

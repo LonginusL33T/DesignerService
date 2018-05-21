@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="WebVerifyApplyReject" title="应聘信息审核不匹配" path="branch"  jellyinject="client.service.web.WebVerifyApplyReject"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

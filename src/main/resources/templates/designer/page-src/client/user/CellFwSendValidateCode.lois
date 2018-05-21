@@ -1,0 +1,36 @@
+package client.service.mobile
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.AcctUser
+import cn.smartx.core.service.validate.ValidateManager
+import com.aolc.designer.utils.EmailServer
+
+PAGE CellFwSendValidateCode(title="忘记密码发送验证码",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var username = request.get("loginname");
+        if(username==null
+                ||StringUtils.isBlank(username+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var user = context.databaseLoader.getEntityByCondition(AcctUser,"username = '"+username+"'");
+            if(user==null){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_USER_NOT_EXIST);
+                result.put(Constants.MESSAGE,i18n.get("user_not_exist"));
+            }else {
+                var validateItem = ValidateManager.getInstance.getValidate;
+                var token = validateItem.getToken;
+                var  emailServer = new EmailServer();
+                if(ValidateManager.getInstance.sendByEmail(emailServer,username as String,"信息验证","您此次的注册的验证码："+validateItem.getCode,token)){
+                    result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+                    result.put(Constants.TOKEN,token);
+                }
+            }
+        }
+        return result;
+    }
+}

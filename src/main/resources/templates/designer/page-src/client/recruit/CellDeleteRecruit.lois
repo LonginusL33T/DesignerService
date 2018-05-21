@@ -1,0 +1,27 @@
+package client.service.mobile
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.MstRecruit
+import com.aolc.designer.MstApplyMapping
+
+PAGE CellDeleteRecruit(title="删除招聘信息",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var uniqueid = request.get("uniqueid");
+        if(uniqueid == null||StringUtils.isBlank(uniqueid+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var recruit = context.databaseLoader.getEntityByCondition(MstRecruit,"uniqueid = '"+uniqueid+"'");
+            var applys = context.databaseLoader.getByCondition(MstApplyMapping,"jobUniqueid = '"+uniqueid+"'");
+            context.databaseLoader.delete(recruit);
+            context.databaseLoader.deleteAll(applys);
+            context.submit;
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        }
+        return result;
+    }
+}

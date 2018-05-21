@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="WebCreateAdvertisement" title="创建广告" path="branch"  jellyinject="client.service.web.WebCreateAdvertisement"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

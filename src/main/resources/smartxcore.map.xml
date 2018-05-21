@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-map xmlns="http://cayenne.apache.org/schema/3.0/modelMap"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://cayenne.apache.org/schema/3.0/modelMap http://cayenne.apache.org/schema/3.0/modelMap.xsd"
+	 project-version="6">
+	<property name="defaultPackage" value="cn.smartx.core.model.entity"/>
+	<db-entity name="acct_dept_prop" catalog="smartx_designer">
+		<db-attribute name="adminAssistant" type="VARCHAR" length="50"/>
+		<db-attribute name="code" type="VARCHAR" length="50"/>
+		<db-attribute name="companyCharge" type="VARCHAR" length="50"/>
+		<db-attribute name="deptCharge" type="VARCHAR" length="50"/>
+		<db-attribute name="document" type="VARCHAR" length="1024"/>
+		<db-attribute name="groupId" type="INTEGER" length="10"/>
+		<db-attribute name="hrAssistant" type="VARCHAR" length="50"/>
+		<db-attribute name="manager" type="VARCHAR" length="50"/>
+		<db-attribute name="name" type="VARCHAR" length="50"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="status" type="VARCHAR" length="50"/>
+	</db-entity>
+	<db-entity name="acct_group" catalog="smartx_designer">
+		<db-attribute name="appcode" type="VARCHAR" length="128"/>
+		<db-attribute name="groupcode" type="VARCHAR" length="64"/>
+		<db-attribute name="grouptype" type="VARCHAR" length="64"/>
+		<db-attribute name="imGroupCode" type="VARCHAR" length="1024"/>
+		<db-attribute name="memo" type="VARCHAR" length="1024"/>
+		<db-attribute name="name" type="VARCHAR" length="128"/>
+		<db-attribute name="pid" type="INTEGER" length="10"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+	</db-entity>
+	<db-entity name="acct_group_role" catalog="smartx_designer">
+		<db-attribute name="gid" type="INTEGER" length="10"/>
+		<db-attribute name="rid" type="INTEGER" length="10"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+	</db-entity>
+	<db-entity name="acct_menu" catalog="smartx_designer">
+		<db-attribute name="appcode" type="VARCHAR" length="128"/>
+		<db-attribute name="code" type="VARCHAR" length="255"/>
+		<db-attribute name="level" type="VARCHAR" length="255"/>
+		<db-attribute name="pid" type="INTEGER" length="10"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="title" type="VARCHAR" length="255"/>
+		<db-attribute name="url" type="VARCHAR" length="255"/>
+	</db-entity>
+	<db-entity name="acct_operation" catalog="smartx_designer">
+		<db-attribute name="appcode" type="VARCHAR" length="128"/>
+		<db-attribute name="code" type="VARCHAR" length="128"/>
+		<db-attribute name="memo" type="VARCHAR" length="1024"/>
+		<db-attribute name="name" type="VARCHAR" length="128"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+	</db-entity>
+	<db-entity name="acct_permission" catalog="smartx_designer">
+		<db-attribute name="appcode" type="VARCHAR" length="128"/>
+		<db-attribute name="name" type="VARCHAR" length="128"/>
+		<db-attribute name="opid" type="INTEGER" length="10"/>
+		<db-attribute name="reid" type="INTEGER" length="10"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+	</db-entity>
+	<db-entity name="acct_resource" catalog="smartx_designer">
+		<db-attribute name="appcode" type="VARCHAR" length="128"/>
+		<db-attribute name="category" type="VARCHAR" length="128"/>
+		<db-attribute name="code" type="VARCHAR" length="128"/>
+		<db-attribute name="memo" type="VARCHAR" length="1024"/>
+		<db-attribute name="name" type="VARCHAR" length="128"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+	</db-entity>
+	<db-entity name="acct_role" catalog="smartx_designer">
+		<db-attribute name="appcode" type="VARCHAR" length="128"/>
+		<db-attribute name="memo" type="VARCHAR" length="1024"/>
+		<db-attribute name="name" type="VARCHAR" length="128"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+	</db-entity>
+	<db-entity name="acct_role_permission" catalog="smartx_designer">
+		<db-attribute name="pid" type="INTEGER" length="10"/>
+		<db-attribute name="rid" type="INTEGER" length="10"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+	</db-entity>
+	<db-entity name="acct_user" catalog="smartx_designer">
+		<db-attribute name="appcode" type="VARCHAR" length="128"/>
+		<db-attribute name="attrA" type="VARCHAR" length="256"/>
+		<db-attribute name="attrB" type="VARCHAR" length="256"/>
+		<db-attribute name="attrC" type="VARCHAR" length="256"/>
+		<db-attribute name="attrD" type="VARCHAR" length="256"/>
+		<db-attribute name="imtoken" type="VARCHAR" length="1024"/>
+		<db-attribute name="locked" type="INTEGER" length="10"/>
+		<db-attribute name="loginname" type="VARCHAR" length="128"/>
+		<db-attribute name="name" type="VARCHAR" length="128"/>
+		<db-attribute name="password" type="VARCHAR" length="512"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="status" type="VARCHAR" length="128"/>
+	</db-entity>
+	<db-entity name="acct_user_group" catalog="smartx_designer">
+		<db-attribute name="gid" type="INTEGER" length="10"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="userid" type="INTEGER" length="10"/>
+	</db-entity>
+	<db-entity name="acct_user_prop" catalog="smartx_designer">
+		<db-attribute name="academicDegree" type="VARCHAR" length="50"/>
+		<db-attribute name="age" type="INTEGER" length="10"/>
+		<db-attribute name="birthTime" type="DATE" length="10"/>
+		<db-attribute name="deptId" type="INTEGER" length="10"/>
+		<db-attribute name="education" type="VARCHAR" length="50"/>
+		<db-attribute name="email" type="VARCHAR" length="256"/>
+		<db-attribute name="emergencyContact" type="VARCHAR" length="1024"/>
+		<db-attribute name="emergencyPerson" type="VARCHAR" length="50"/>
+		<db-attribute name="ethnic" type="VARCHAR" length="50"/>
+		<db-attribute name="firstName" type="VARCHAR" length="128"/>
+		<db-attribute name="graduateUniversity" type="VARCHAR" length="1024"/>
+		<db-attribute name="header" type="VARCHAR" length="1024"/>
+		<db-attribute name="homeAddress" type="VARCHAR" length="1024"/>
+		<db-attribute name="identyNumbet" type="VARCHAR" length="50"/>
+		<db-attribute name="isMarry" type="BIT"/>
+		<db-attribute name="joinWorkTime" type="DATE" length="10"/>
+		<db-attribute name="lastName" type="VARCHAR" length="128"/>
+		<db-attribute name="memoA" type="VARCHAR" length="1024"/>
+		<db-attribute name="memoB" type="VARCHAR" length="1024"/>
+		<db-attribute name="name" type="VARCHAR" length="50"/>
+		<db-attribute name="nativePlace" type="VARCHAR" length="1024"/>
+		<db-attribute name="nature" type="VARCHAR" length="1024"/>
+		<db-attribute name="partyTime" type="DATE" length="10"/>
+		<db-attribute name="personLevel" type="VARCHAR" length="256"/>
+		<db-attribute name="politicalAffiliation" type="VARCHAR" length="50"/>
+		<db-attribute name="profession" type="VARCHAR" length="50"/>
+		<db-attribute name="sex" type="VARCHAR" length="50"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="staffSource" type="VARCHAR" length="50"/>
+		<db-attribute name="startWorkTime" type="DATE" length="10"/>
+		<db-attribute name="technical" type="VARCHAR" length="1024"/>
+		<db-attribute name="telephone" type="VARCHAR" length="50"/>
+		<db-attribute name="telephoneB" type="VARCHAR" length="50"/>
+		<db-attribute name="telephoneC" type="VARCHAR" length="50"/>
+		<db-attribute name="uid" type="INTEGER" length="10"/>
+		<db-attribute name="usercode" type="INTEGER" length="10"/>
+		<db-attribute name="wageNumber" type="VARCHAR" length="1024"/>
+		<db-attribute name="workAge" type="VARCHAR" length="64"/>
+		<db-attribute name="workLife" type="VARCHAR" length="64"/>
+	</db-entity>
+	<db-entity name="acct_user_role" catalog="smartx_designer">
+		<db-attribute name="rid" type="INTEGER" length="10"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="userid" type="INTEGER" length="10"/>
+	</db-entity>
+	<db-entity name="x_app" catalog="smartx_designer">
+		<db-attribute name="Code" type="VARCHAR" length="128"/>
+		<db-attribute name="InitPage" type="VARCHAR" length="128"/>
+		<db-attribute name="LastModifyDate" type="DATE" length="10"/>
+		<db-attribute name="LastModifyUser" type="VARCHAR" length="128"/>
+		<db-attribute name="Name" type="VARCHAR" length="128"/>
+		<db-attribute name="Sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+	</db-entity>
+	<db-entity name="x_docbase" catalog="smartx_designer">
+		<db-attribute name="Createdate" type="DATE" length="10"/>
+		<db-attribute name="Extattr1" type="VARCHAR" length="256"/>
+		<db-attribute name="Extattr2" type="VARCHAR" length="256"/>
+		<db-attribute name="Folder" type="VARCHAR" length="256"/>
+		<db-attribute name="FolderType" type="VARCHAR" length="128"/>
+		<db-attribute name="Owner" type="VARCHAR" length="128"/>
+		<db-attribute name="Sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="Status" type="VARCHAR" length="32"/>
+	</db-entity>
+	<db-entity name="x_docitem" catalog="smartx_designer">
+		<db-attribute name="BaseSid" type="INTEGER" length="10"/>
+		<db-attribute name="Createdate" type="DATE" length="10"/>
+		<db-attribute name="FileType" type="VARCHAR" length="256"/>
+		<db-attribute name="Filesize" type="INTEGER" length="10"/>
+		<db-attribute name="Memo" type="VARCHAR" length="256"/>
+		<db-attribute name="Name" type="VARCHAR" length="256"/>
+		<db-attribute name="Owner" type="VARCHAR" length="128"/>
+		<db-attribute name="SName" type="VARCHAR" length="256"/>
+		<db-attribute name="Sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="Thumburl" type="VARCHAR" length="1024"/>
+		<db-attribute name="Token" type="VARCHAR" length="256"/>
+		<db-attribute name="Url" type="VARCHAR" length="1024"/>
+		<db-attribute name="Ver" type="INTEGER" length="10"/>
+	</db-entity>
+	<db-entity name="x_page" catalog="smartx_designer">
+		<db-attribute name="Appid" type="INTEGER" length="10"/>
+		<db-attribute name="Code" type="VARCHAR" length="128"/>
+		<db-attribute name="LastModifyDate" type="DATE" length="10"/>
+		<db-attribute name="LastModifyUser" type="VARCHAR" length="128"/>
+		<db-attribute name="Name" type="VARCHAR" length="128"/>
+		<db-attribute name="PageTemplate" type="VARCHAR" length="256"/>
+		<db-attribute name="Sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="Title" type="VARCHAR" length="256"/>
+	</db-entity>
+	<db-entity name="x_previewitem" catalog="smartx_designer">
+		<db-attribute name="CopyName" type="VARCHAR" length="256"/>
+		<db-attribute name="CopyUrl" type="VARCHAR" length="256"/>
+		<db-attribute name="Createdate" type="DATE" length="10"/>
+		<db-attribute name="FileType" type="VARCHAR" length="256"/>
+		<db-attribute name="Filesize" type="INTEGER" length="10"/>
+		<db-attribute name="Name" type="VARCHAR" length="256"/>
+		<db-attribute name="SName" type="VARCHAR" length="256"/>
+		<db-attribute name="Sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="Token" type="VARCHAR" length="256"/>
+		<db-attribute name="Url" type="VARCHAR" length="256"/>
+	</db-entity>
+	<db-entity name="x_task" catalog="smartx_designer">
+		<db-attribute name="appid" type="INTEGER" isMandatory="true" length="10"/>
+		<db-attribute name="code" type="VARCHAR" length="255"/>
+		<db-attribute name="name" type="VARCHAR" length="255"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="taskTemplate" type="VARCHAR" length="255"/>
+	</db-entity>
+	<obj-entity name="AcctDeptProp" className="cn.smartx.core.model.entity.AcctDeptProp" dbEntityName="acct_dept_prop">
+		<obj-attribute name="adminAssistant" type="java.lang.String" db-attribute-path="adminAssistant"/>
+		<obj-attribute name="code" type="java.lang.String" db-attribute-path="code"/>
+		<obj-attribute name="companyCharge" type="java.lang.String" db-attribute-path="companyCharge"/>
+		<obj-attribute name="deptCharge" type="java.lang.String" db-attribute-path="deptCharge"/>
+		<obj-attribute name="document" type="java.lang.String" db-attribute-path="document"/>
+		<obj-attribute name="groupId" type="java.lang.Integer" db-attribute-path="groupId"/>
+		<obj-attribute name="hrAssistant" type="java.lang.String" db-attribute-path="hrAssistant"/>
+		<obj-attribute name="manager" type="java.lang.String" db-attribute-path="manager"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+		<obj-attribute name="status" type="java.lang.String" db-attribute-path="status"/>
+	</obj-entity>
+	<obj-entity name="AcctGroup" className="cn.smartx.core.model.entity.AcctGroup" dbEntityName="acct_group">
+		<obj-attribute name="appcode" type="java.lang.String" db-attribute-path="appcode"/>
+		<obj-attribute name="groupcode" type="java.lang.String" db-attribute-path="groupcode"/>
+		<obj-attribute name="grouptype" type="java.lang.String" db-attribute-path="grouptype"/>
+		<obj-attribute name="imGroupCode" type="java.lang.String" db-attribute-path="imGroupCode"/>
+		<obj-attribute name="memo" type="java.lang.String" db-attribute-path="memo"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="pid" type="java.lang.Integer" db-attribute-path="pid"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+	</obj-entity>
+	<obj-entity name="AcctGroupRole" className="cn.smartx.core.model.entity.AcctGroupRole" dbEntityName="acct_group_role">
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+	</obj-entity>
+	<obj-entity name="AcctMenu" className="cn.smartx.core.model.entity.AcctMenu" dbEntityName="acct_menu">
+		<obj-attribute name="appcode" type="java.lang.String" db-attribute-path="appcode"/>
+		<obj-attribute name="code" type="java.lang.String" db-attribute-path="code"/>
+		<obj-attribute name="level" type="java.lang.String" db-attribute-path="level"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+		<obj-attribute name="title" type="java.lang.String" db-attribute-path="title"/>
+		<obj-attribute name="url" type="java.lang.String" db-attribute-path="url"/>
+	</obj-entity>
+	<obj-entity name="AcctOperation" className="cn.smartx.core.model.entity.AcctOperation" dbEntityName="acct_operation">
+		<obj-attribute name="appcode" type="java.lang.String" db-attribute-path="appcode"/>
+		<obj-attribute name="code" type="java.lang.String" db-attribute-path="code"/>
+		<obj-attribute name="memo" type="java.lang.String" db-attribute-path="memo"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+	</obj-entity>
+	<obj-entity name="AcctPermission" className="cn.smartx.core.model.entity.AcctPermission" dbEntityName="acct_permission">
+		<obj-attribute name="appcode" type="java.lang.String" db-attribute-path="appcode"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+	</obj-entity>
+	<obj-entity name="AcctResource" className="cn.smartx.core.model.entity.AcctResource" dbEntityName="acct_resource">
+		<obj-attribute name="appcode" type="java.lang.String" db-attribute-path="appcode"/>
+		<obj-attribute name="category" type="java.lang.String" db-attribute-path="category"/>
+		<obj-attribute name="code" type="java.lang.String" db-attribute-path="code"/>
+		<obj-attribute name="memo" type="java.lang.String" db-attribute-path="memo"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+	</obj-entity>
+	<obj-entity name="AcctRole" className="cn.smartx.core.model.entity.AcctRole" dbEntityName="acct_role">
+		<obj-attribute name="appcode" type="java.lang.String" db-attribute-path="appcode"/>
+		<obj-attribute name="memo" type="java.lang.String" db-attribute-path="memo"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+	</obj-entity>
+	<obj-entity name="AcctRolePermission" className="cn.smartx.core.model.entity.AcctRolePermission" dbEntityName="acct_role_permission">
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+	</obj-entity>
+	<obj-entity name="AcctUser" className="cn.smartx.core.model.entity.AcctUser" dbEntityName="acct_user">
+		<obj-attribute name="appcode" type="java.lang.String" db-attribute-path="appcode"/>
+		<obj-attribute name="attrA" type="java.lang.String" db-attribute-path="attrA"/>
+		<obj-attribute name="attrB" type="java.lang.String" db-attribute-path="attrB"/>
+		<obj-attribute name="attrC" type="java.lang.String" db-attribute-path="attrC"/>
+		<obj-attribute name="attrD" type="java.lang.String" db-attribute-path="attrD"/>
+		<obj-attribute name="imtoken" type="java.lang.String" db-attribute-path="imtoken"/>
+		<obj-attribute name="locked" type="java.lang.Integer" db-attribute-path="locked"/>
+		<obj-attribute name="loginname" type="java.lang.String" db-attribute-path="loginname"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="password" type="java.lang.String" db-attribute-path="password"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+		<obj-attribute name="status" type="java.lang.String" db-attribute-path="status"/>
+	</obj-entity>
+	<obj-entity name="AcctUserGroup" className="cn.smartx.core.model.entity.AcctUserGroup" dbEntityName="acct_user_group">
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+	</obj-entity>
+	<obj-entity name="AcctUserProp" className="cn.smartx.core.model.entity.AcctUserProp" dbEntityName="acct_user_prop">
+		<obj-attribute name="academicDegree" type="java.lang.String" db-attribute-path="academicDegree"/>
+		<obj-attribute name="age" type="java.lang.Integer" db-attribute-path="age"/>
+		<obj-attribute name="birthTime" type="java.util.Date" db-attribute-path="birthTime"/>
+		<obj-attribute name="deptId" type="java.lang.Integer" db-attribute-path="deptId"/>
+		<obj-attribute name="education" type="java.lang.String" db-attribute-path="education"/>
+		<obj-attribute name="email" type="java.lang.String" db-attribute-path="email"/>
+		<obj-attribute name="emergencyContact" type="java.lang.String" db-attribute-path="emergencyContact"/>
+		<obj-attribute name="emergencyPerson" type="java.lang.String" db-attribute-path="emergencyPerson"/>
+		<obj-attribute name="ethnic" type="java.lang.String" db-attribute-path="ethnic"/>
+		<obj-attribute name="firstName" type="java.lang.String" db-attribute-path="firstName"/>
+		<obj-attribute name="graduateUniversity" type="java.lang.String" db-attribute-path="graduateUniversity"/>
+		<obj-attribute name="header" type="java.lang.String" db-attribute-path="header"/>
+		<obj-attribute name="homeAddress" type="java.lang.String" db-attribute-path="homeAddress"/>
+		<obj-attribute name="identyNumbet" type="java.lang.String" db-attribute-path="identyNumbet"/>
+		<obj-attribute name="isMarry" type="java.lang.Boolean" db-attribute-path="isMarry"/>
+		<obj-attribute name="joinWorkTime" type="java.util.Date" db-attribute-path="joinWorkTime"/>
+		<obj-attribute name="lastName" type="java.lang.String" db-attribute-path="lastName"/>
+		<obj-attribute name="memoA" type="java.lang.String" db-attribute-path="memoA"/>
+		<obj-attribute name="memoB" type="java.lang.String" db-attribute-path="memoB"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="nativePlace" type="java.lang.String" db-attribute-path="nativePlace"/>
+		<obj-attribute name="nature" type="java.lang.String" db-attribute-path="nature"/>
+		<obj-attribute name="partyTime" type="java.util.Date" db-attribute-path="partyTime"/>
+		<obj-attribute name="personLevel" type="java.lang.String" db-attribute-path="personLevel"/>
+		<obj-attribute name="politicalAffiliation" type="java.lang.String" db-attribute-path="politicalAffiliation"/>
+		<obj-attribute name="profession" type="java.lang.String" db-attribute-path="profession"/>
+		<obj-attribute name="sex" type="java.lang.String" db-attribute-path="sex"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+		<obj-attribute name="staffSource" type="java.lang.String" db-attribute-path="staffSource"/>
+		<obj-attribute name="startWorkTime" type="java.util.Date" db-attribute-path="startWorkTime"/>
+		<obj-attribute name="technical" type="java.lang.String" db-attribute-path="technical"/>
+		<obj-attribute name="telephone" type="java.lang.String" db-attribute-path="telephone"/>
+		<obj-attribute name="telephoneB" type="java.lang.String" db-attribute-path="telephoneB"/>
+		<obj-attribute name="telephoneC" type="java.lang.String" db-attribute-path="telephoneC"/>
+		<obj-attribute name="usercode" type="java.lang.Integer" db-attribute-path="usercode"/>
+		<obj-attribute name="wageNumber" type="java.lang.String" db-attribute-path="wageNumber"/>
+		<obj-attribute name="workAge" type="java.lang.String" db-attribute-path="workAge"/>
+		<obj-attribute name="workLife" type="java.lang.String" db-attribute-path="workLife"/>
+	</obj-entity>
+	<obj-entity name="AcctUserRole" className="cn.smartx.core.model.entity.AcctUserRole" dbEntityName="acct_user_role">
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+	</obj-entity>
+	<obj-entity name="XApp" className="cn.smartx.core.model.entity.XApp" dbEntityName="x_app">
+		<obj-attribute name="code" type="java.lang.String" db-attribute-path="Code"/>
+		<obj-attribute name="initPage" type="java.lang.String" db-attribute-path="InitPage"/>
+		<obj-attribute name="lastModifyDate" type="java.util.Date" db-attribute-path="LastModifyDate"/>
+		<obj-attribute name="lastModifyUser" type="java.lang.String" db-attribute-path="LastModifyUser"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="Name"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="Sid"/>
+	</obj-entity>
+	<obj-entity name="XDocbase" className="cn.smartx.core.model.entity.XDocbase" dbEntityName="x_docbase">
+		<obj-attribute name="createdate" type="java.util.Date" db-attribute-path="Createdate"/>
+		<obj-attribute name="extattr1" type="java.lang.String" db-attribute-path="Extattr1"/>
+		<obj-attribute name="extattr2" type="java.lang.String" db-attribute-path="Extattr2"/>
+		<obj-attribute name="folder" type="java.lang.String" db-attribute-path="Folder"/>
+		<obj-attribute name="folderType" type="java.lang.String" db-attribute-path="FolderType"/>
+		<obj-attribute name="owner" type="java.lang.String" db-attribute-path="Owner"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="Sid"/>
+		<obj-attribute name="status" type="java.lang.String" db-attribute-path="Status"/>
+	</obj-entity>
+	<obj-entity name="XDocitem" className="cn.smartx.core.model.entity.XDocitem" dbEntityName="x_docitem">
+		<obj-attribute name="createdate" type="java.util.Date" db-attribute-path="Createdate"/>
+		<obj-attribute name="fileType" type="java.lang.String" db-attribute-path="FileType"/>
+		<obj-attribute name="filesize" type="java.lang.Integer" db-attribute-path="Filesize"/>
+		<obj-attribute name="memo" type="java.lang.String" db-attribute-path="Memo"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="Name"/>
+		<obj-attribute name="owner" type="java.lang.String" db-attribute-path="Owner"/>
+		<obj-attribute name="sName" type="java.lang.String" db-attribute-path="SName"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="Sid"/>
+		<obj-attribute name="thumburl" type="java.lang.String" db-attribute-path="Thumburl"/>
+		<obj-attribute name="token" type="java.lang.String" db-attribute-path="Token"/>
+		<obj-attribute name="url" type="java.lang.String" db-attribute-path="Url"/>
+		<obj-attribute name="ver" type="java.lang.Integer" db-attribute-path="Ver"/>
+	</obj-entity>
+	<obj-entity name="XPage" className="cn.smartx.core.model.entity.XPage" dbEntityName="x_page">
+		<obj-attribute name="code" type="java.lang.String" db-attribute-path="Code"/>
+		<obj-attribute name="lastModifyDate" type="java.util.Date" db-attribute-path="LastModifyDate"/>
+		<obj-attribute name="lastModifyUser" type="java.lang.String" db-attribute-path="LastModifyUser"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="Name"/>
+		<obj-attribute name="pageTemplate" type="java.lang.String" db-attribute-path="PageTemplate"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="Sid"/>
+		<obj-attribute name="title" type="java.lang.String" db-attribute-path="Title"/>
+	</obj-entity>
+	<obj-entity name="XPreviewitem" className="cn.smartx.core.model.entity.XPreviewitem" dbEntityName="x_previewitem">
+		<obj-attribute name="copyName" type="java.lang.String" db-attribute-path="CopyName"/>
+		<obj-attribute name="copyUrl" type="java.lang.String" db-attribute-path="CopyUrl"/>
+		<obj-attribute name="createdate" type="java.util.Date" db-attribute-path="Createdate"/>
+		<obj-attribute name="fileType" type="java.lang.String" db-attribute-path="FileType"/>
+		<obj-attribute name="filesize" type="java.lang.Integer" db-attribute-path="Filesize"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="Name"/>
+		<obj-attribute name="sName" type="java.lang.String" db-attribute-path="SName"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="Sid"/>
+		<obj-attribute name="token" type="java.lang.String" db-attribute-path="Token"/>
+		<obj-attribute name="url" type="java.lang.String" db-attribute-path="Url"/>
+	</obj-entity>
+	<obj-entity name="XTask" className="cn.smartx.core.model.entity.XTask" dbEntityName="x_task">
+		<obj-attribute name="code" type="java.lang.String" db-attribute-path="code"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+		<obj-attribute name="taskTemplate" type="java.lang.String" db-attribute-path="taskTemplate"/>
+	</obj-entity>
+	<db-relationship name="acctGroupRoleArray" source="acct_group" target="acct_group_role" toMany="true">
+		<db-attribute-pair source="sid" target="gid"/>
+	</db-relationship>
+	<db-relationship name="acctUserGroupArray" source="acct_group" target="acct_user_group" toMany="true">
+		<db-attribute-pair source="sid" target="gid"/>
+	</db-relationship>
+	<db-relationship name="toAcctGroup" source="acct_group_role" target="acct_group" toMany="false">
+		<db-attribute-pair source="gid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="toAcctRole" source="acct_group_role" target="acct_role" toMany="false">
+		<db-attribute-pair source="rid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="acctMenuArray" source="acct_menu" target="acct_menu" toMany="true">
+		<db-attribute-pair source="sid" target="pid"/>
+	</db-relationship>
+	<db-relationship name="toAcctMenu" source="acct_menu" target="acct_menu" toMany="false">
+		<db-attribute-pair source="pid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="acctPermissionArray" source="acct_operation" target="acct_permission" toMany="true">
+		<db-attribute-pair source="sid" target="opid"/>
+	</db-relationship>
+	<db-relationship name="acctRolePermissionArray" source="acct_permission" target="acct_role_permission" toMany="true">
+		<db-attribute-pair source="sid" target="pid"/>
+	</db-relationship>
+	<db-relationship name="toAcctOperation" source="acct_permission" target="acct_operation" toMany="false">
+		<db-attribute-pair source="opid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="toAcctResource" source="acct_permission" target="acct_resource" toMany="false">
+		<db-attribute-pair source="reid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="acctPermissionArray" source="acct_resource" target="acct_permission" toMany="true">
+		<db-attribute-pair source="sid" target="reid"/>
+	</db-relationship>
+	<db-relationship name="acctGroupRoleArray" source="acct_role" target="acct_group_role" toMany="true">
+		<db-attribute-pair source="sid" target="rid"/>
+	</db-relationship>
+	<db-relationship name="acctRolePermissionArray" source="acct_role" target="acct_role_permission" toMany="true">
+		<db-attribute-pair source="sid" target="rid"/>
+	</db-relationship>
+	<db-relationship name="acctUserRoleArray" source="acct_role" target="acct_user_role" toMany="true">
+		<db-attribute-pair source="sid" target="rid"/>
+	</db-relationship>
+	<db-relationship name="toAcctPermission" source="acct_role_permission" target="acct_permission" toMany="false">
+		<db-attribute-pair source="pid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="toAcctRole" source="acct_role_permission" target="acct_role" toMany="false">
+		<db-attribute-pair source="rid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="acctUserGroupArray" source="acct_user" target="acct_user_group" toMany="true">
+		<db-attribute-pair source="sid" target="userid"/>
+	</db-relationship>
+	<db-relationship name="acctUserPropArray" source="acct_user" target="acct_user_prop" toMany="true">
+		<db-attribute-pair source="sid" target="uid"/>
+	</db-relationship>
+	<db-relationship name="acctUserRoleArray" source="acct_user" target="acct_user_role" toMany="true">
+		<db-attribute-pair source="sid" target="userid"/>
+	</db-relationship>
+	<db-relationship name="toAcctGroup" source="acct_user_group" target="acct_group" toMany="false">
+		<db-attribute-pair source="gid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="toAcctUser" source="acct_user_group" target="acct_user" toMany="false">
+		<db-attribute-pair source="userid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="toAcctUser" source="acct_user_prop" target="acct_user" toMany="false">
+		<db-attribute-pair source="uid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="toAcctRole" source="acct_user_role" target="acct_role" toMany="false">
+		<db-attribute-pair source="rid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="toAcctUser" source="acct_user_role" target="acct_user" toMany="false">
+		<db-attribute-pair source="userid" target="sid"/>
+	</db-relationship>
+	<db-relationship name="xPageArray" source="x_app" target="x_page" toMany="true">
+		<db-attribute-pair source="Sid" target="Appid"/>
+	</db-relationship>
+	<db-relationship name="xTaskArray" source="x_app" target="x_task" toMany="true">
+		<db-attribute-pair source="Sid" target="appid"/>
+	</db-relationship>
+	<db-relationship name="xDocitemArray" source="x_docbase" target="x_docitem" toMany="true">
+		<db-attribute-pair source="Sid" target="BaseSid"/>
+	</db-relationship>
+	<db-relationship name="toXDocbase" source="x_docitem" target="x_docbase" toMany="false">
+		<db-attribute-pair source="BaseSid" target="Sid"/>
+	</db-relationship>
+	<db-relationship name="toXApp" source="x_page" target="x_app" toMany="false">
+		<db-attribute-pair source="Appid" target="Sid"/>
+	</db-relationship>
+	<db-relationship name="toXApp" source="x_task" target="x_app" toMany="false">
+		<db-attribute-pair source="appid" target="Sid"/>
+	</db-relationship>
+	<obj-relationship name="acctGroupRoleArray" source="AcctGroup" target="AcctGroupRole" deleteRule="Deny" db-relationship-path="acctGroupRoleArray"/>
+	<obj-relationship name="acctUserGroupArray" source="AcctGroup" target="AcctUserGroup" deleteRule="Deny" db-relationship-path="acctUserGroupArray"/>
+	<obj-relationship name="toAcctGroup" source="AcctGroupRole" target="AcctGroup" deleteRule="Nullify" db-relationship-path="toAcctGroup"/>
+	<obj-relationship name="toAcctRole" source="AcctGroupRole" target="AcctRole" deleteRule="Nullify" db-relationship-path="toAcctRole"/>
+	<obj-relationship name="acctMenuArray" source="AcctMenu" target="AcctMenu" deleteRule="Deny" db-relationship-path="acctMenuArray"/>
+	<obj-relationship name="toAcctMenu" source="AcctMenu" target="AcctMenu" deleteRule="Nullify" db-relationship-path="toAcctMenu"/>
+	<obj-relationship name="acctPermissionArray" source="AcctOperation" target="AcctPermission" deleteRule="Deny" db-relationship-path="acctPermissionArray"/>
+	<obj-relationship name="acctRolePermissionArray" source="AcctPermission" target="AcctRolePermission" deleteRule="Deny" db-relationship-path="acctRolePermissionArray"/>
+	<obj-relationship name="toAcctOperation" source="AcctPermission" target="AcctOperation" deleteRule="Nullify" db-relationship-path="toAcctOperation"/>
+	<obj-relationship name="toAcctResource" source="AcctPermission" target="AcctResource" deleteRule="Nullify" db-relationship-path="toAcctResource"/>
+	<obj-relationship name="acctPermissionArray" source="AcctResource" target="AcctPermission" deleteRule="Deny" db-relationship-path="acctPermissionArray"/>
+	<obj-relationship name="acctGroupRoleArray" source="AcctRole" target="AcctGroupRole" deleteRule="Deny" db-relationship-path="acctGroupRoleArray"/>
+	<obj-relationship name="acctRolePermissionArray" source="AcctRole" target="AcctRolePermission" deleteRule="Deny" db-relationship-path="acctRolePermissionArray"/>
+	<obj-relationship name="acctUserRoleArray" source="AcctRole" target="AcctUserRole" deleteRule="Deny" db-relationship-path="acctUserRoleArray"/>
+	<obj-relationship name="toAcctPermission" source="AcctRolePermission" target="AcctPermission" deleteRule="Nullify" db-relationship-path="toAcctPermission"/>
+	<obj-relationship name="toAcctRole" source="AcctRolePermission" target="AcctRole" deleteRule="Nullify" db-relationship-path="toAcctRole"/>
+	<obj-relationship name="acctUserGroupArray" source="AcctUser" target="AcctUserGroup" deleteRule="Deny" db-relationship-path="acctUserGroupArray"/>
+	<obj-relationship name="acctUserPropArray" source="AcctUser" target="AcctUserProp" deleteRule="Deny" db-relationship-path="acctUserPropArray"/>
+	<obj-relationship name="acctUserRoleArray" source="AcctUser" target="AcctUserRole" deleteRule="Deny" db-relationship-path="acctUserRoleArray"/>
+	<obj-relationship name="toAcctGroup" source="AcctUserGroup" target="AcctGroup" deleteRule="Nullify" db-relationship-path="toAcctGroup"/>
+	<obj-relationship name="toAcctUser" source="AcctUserGroup" target="AcctUser" deleteRule="Nullify" db-relationship-path="toAcctUser"/>
+	<obj-relationship name="toAcctUser" source="AcctUserProp" target="AcctUser" deleteRule="Nullify" db-relationship-path="toAcctUser"/>
+	<obj-relationship name="toAcctRole" source="AcctUserRole" target="AcctRole" deleteRule="Nullify" db-relationship-path="toAcctRole"/>
+	<obj-relationship name="toAcctUser" source="AcctUserRole" target="AcctUser" deleteRule="Nullify" db-relationship-path="toAcctUser"/>
+	<obj-relationship name="xPageArray" source="XApp" target="XPage" deleteRule="Deny" db-relationship-path="xPageArray"/>
+	<obj-relationship name="xTaskArray" source="XApp" target="XTask" deleteRule="Deny" db-relationship-path="xTaskArray"/>
+	<obj-relationship name="xDocitemArray" source="XDocbase" target="XDocitem" deleteRule="Deny" db-relationship-path="xDocitemArray"/>
+	<obj-relationship name="toXDocbase" source="XDocitem" target="XDocbase" deleteRule="Nullify" db-relationship-path="toXDocbase"/>
+	<obj-relationship name="toXApp" source="XPage" target="XApp" deleteRule="Nullify" db-relationship-path="toXApp"/>
+	<obj-relationship name="toXApp" source="XTask" target="XApp" deleteRule="Nullify" db-relationship-path="toXApp"/>
+</data-map>

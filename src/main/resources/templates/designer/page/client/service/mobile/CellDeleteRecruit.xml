@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="CellDeleteRecruit" title="删除招聘信息" path="branch"  jellyinject="client.service.mobile.CellDeleteRecruit"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

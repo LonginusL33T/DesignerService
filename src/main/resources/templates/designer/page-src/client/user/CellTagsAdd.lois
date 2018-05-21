@@ -1,0 +1,34 @@
+package client.service.mobile
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.MstTags
+import com.aolc.designer.utils.Utils
+
+PAGE CellTagsAdd(title="添加标签",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var tags= request.get("tags");
+        if(tags ==null
+                ||StringUtils.isBlank(tags+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+        }else{
+            var userUniqueid = session.getAttribute("uniqueid");
+            var tag = context.databaseLoader.getByCondition(MstTags,"userUniqueid ='"+userUniqueid+"' and name ='"+tags+"'");
+            if(tag==null){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_TAG_ALREADY_EXIST);
+                result.put(Constants.MESSAGE,i18n.get("tag_already_exist"));
+            }else{
+                var newTag = context.databaseLoader.ceateNew(MstTags);
+                newTag.uniqueid = Utils.generateUUID;
+                newTag.userUniqueid = userUniqueid+"";
+                newTag.name = tags+"";
+                context.submit;
+                result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+            }
+        }
+        return result;
+    }
+}

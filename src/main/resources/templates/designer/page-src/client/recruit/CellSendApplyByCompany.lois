@@ -1,0 +1,46 @@
+package client.service.mobile
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.utils.Utils
+import java.util.Date
+import com.aolc.designer.MstCompanyApplyMapping
+import com.aolc.designer.AcctUser
+import com.aolc.designer.MstRecruit
+
+PAGE CellSendApplyByCompany(title="约面试",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var userUniqueid = request.get("user_uniqueid");
+        var ownerUniqueid = request.get("owner_uniqueid");
+
+        if(ownerUniqueid == null || StringUtils.isBlank(ownerUniqueid+"")
+                ||userUniqueid == null || StringUtils.isBlank(userUniqueid+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var user = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid = '"+userUniqueid+"'");
+            var owner = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid ='"+ownerUniqueid+"'")
+            if(user == null || owner == null){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_SEND_APPLY_ERROR);
+                result.put(Constants.MESSAGE,i18n.get("send_apply_user_not_exit"));
+            }else if(user.category == Constants.COMPANY){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_SEND_APPLY_ERROR);
+                result.put(Constants.MESSAGE,i18n.get("send_apply_user_type_error"));
+            }else{
+                var apply = context.databaseLoader.ceateNew(MstCompanyApplyMapping);
+                apply.uniqueid = Utils.generateUUID;
+                apply.userUniqueid = ownerUniqueid+"";
+                apply.emUniqueid = userUniqueid+"";
+                apply.createTime = new Date();
+                apply.status = Constants.VERIFING;
+                context.submit;
+                result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+            }
+
+        }
+        return result;
+    }
+}

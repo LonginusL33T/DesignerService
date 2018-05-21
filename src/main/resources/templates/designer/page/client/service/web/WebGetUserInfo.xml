@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="WebGetUserInfo" title="获取用户信息" path="branch"  jellyinject="client.service.web.WebGetUserInfo"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

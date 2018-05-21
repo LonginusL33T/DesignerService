@@ -1,0 +1,98 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.AcctUser
+import java.util.ArrayList
+import org.apache.cayenne.query.Ordering
+import org.apache.cayenne.query.SortOrder
+import com.aolc.designer.AcctUserCompany
+import com.aolc.designer.AcctUserPro
+import cn.smartx.core.common.SmartxConfig
+import org.apache.cayenne.query.EJBQLQuery
+import cn.smartx.core.ds.database.DBService
+import org.apache.cayenne.ObjectContext
+import java.util.List
+
+PAGE WebVerifyRegistion(title="注册信息审核列表",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var category = request.get("category");
+        var status = request.get("status");
+        var pagesize = request.get("pagesize");
+        var pagenum = request.get("pagenum");
+        var query = request.get("query");
+
+        if(pagesize==null||StringUtils.isBlank(pagesize+"")){
+            pagesize = 10;
+        }else{
+            pagesize = Integer.parseInt(pagesize+"");
+        }
+        if(pagenum == null || StringUtils.isBlank(pagenum+" ")){
+            pagenum = 0;
+        }else{
+            pagenum = Integer.parseInt(pagenum+"");
+        }
+        //var sql = "1=1";
+        var sql ="select u from DAcctUser u where 1=1"
+        var ejbsql = "select count(uniqueid) from DAcctUser user where 1=1"
+        if(category!=null&&!StringUtils.isBlank(category+"")){
+            sql += " and u.category = '"+category+"'";
+            ejbsql += " and user.category = '"+category+"'";
+        }
+        if(status !=null &&!StringUtils.isBlank(status+"")){
+            if(Constants.UPLOAD == status){
+                //sql += " and upload = 1";
+                sql += " and u.upload =1 ";
+                ejbsql += " and user.upload = 1";
+            }else{
+                //sql += " and status = '"+status+"' and upload = 0";
+                sql += " and u.status = '"+status+"' and u.upload = 0";
+                ejbsql += " and user.status = '"+status+"' and user.upload = 0"
+            }
+        }
+        if(query !=null ){
+            sql += " and (u.uniqueid in (select pro.userUniqueid from DAcctUserPro pro where pro.name like '%"+query+"%') or u.uniqueid in (select com.userUniqueid from DAcctUserCompany com where com.name like '%"+query+"%'))";
+            ejbsql += " and (user.uniqueid in (select pro.userUniqueid from DAcctUserPro pro where pro.name like '%"+query+"%') or user.uniqueid in (select com.userUniqueid from DAcctUserCompany com where com.name like '%"+query+"%'))";
+        }
+        sql+=" order by u.createTime DESC";
+        var count = context.databaseLoader.getQueryTotalCount(ejbsql);
+        var orderings = new ArrayList();
+        orderings.add(new Ordering("createTime",SortOrder.DESCENDING));
+        //var users = context.databaseLoader.getByConditionPagination(AcctUser,sql,null,orderings,pagesize as Integer,pagenum as Integer);
+        var limit = (pagenum as Integer)*(pagesize as Integer);
+        var EJBQLQuery ejbqlQuery = new EJBQLQuery(sql+"");
+        ejbqlQuery.setFetchLimit(pagesize as Integer);
+        ejbqlQuery.setFetchOffset(limit as Integer);
+        var ObjectContext objectContext = DBService.createDatabaseContext();
+        var List<AcctUser> users = objectContext.performQuery(ejbqlQuery);
+        var userResult = new ArrayList();
+        for(user : users){
+            var userMap = new HashMap();
+            if(Constants.COMPANY==user.category){
+                var company = context.databaseLoader.getEntityByCondition(AcctUserCompany,"userUniqueid = '"+user.uniqueid+"'")
+                userMap.put("name",company.name);
+                userMap.put("brand_name",company.brandName);
+                userMap.put("contact_telephone",company.connectTelephone);
+                userMap.put("email",company.email);
+            }else{
+                var userInfo = context.databaseLoader.getEntityByCondition(AcctUserPro,"userUniqueid = '"+user.uniqueid+"'")
+                userMap.put("name",userInfo.name);
+                userMap.put("brand_name",userInfo.brandName);
+                userMap.put("contact_telephone",userInfo.telephone);
+                userMap.put("email",userInfo.email);
+            }
+            userMap.put("uniqueid",user.uniqueid);
+            userMap.put("category",user.category);
+            userMap.put("status",user.status);
+            userMap.put("upload",user.upload);
+            userResult.add(userMap);
+        }
+        result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        result.put(Constants.USER,userResult);
+        result.put(Constants.TOTAL_NUM,count);
+        return result;
+    }
+}

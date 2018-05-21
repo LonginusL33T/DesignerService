@@ -1,0 +1,44 @@
+package client.service.mobile
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.MstFeedback
+import com.aolc.designer.utils.Utils
+import java.util.Date
+
+PAGE CellFeedBack(title="用户反馈",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var sugestion = request.get("sugestion");
+        var images = request.get("images");
+        if(sugestion==null
+                ||StringUtils.isBlank(sugestion+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var feedBack = context.databaseLoader.ceateNew(MstFeedback);
+            feedBack.feedback = sugestion+"";
+            if(images!=null&&!StringUtils.isBlank(images+"")){
+                var String[] imageItems = (images+"").split(",");
+                if(imageItems.size==1){
+                    feedBack.image1 = imageItems.get(0);
+                }else if(imageItems.size ==2){
+                    feedBack.image1 = imageItems.get(0);
+                    feedBack.image2 = imageItems.get(1);
+                }else{
+                    feedBack.image1 = imageItems.get(0);
+                    feedBack.image2 = imageItems.get(1);
+                    feedBack.image3 = imageItems.get(2);
+                }
+            }
+            feedBack.uniqueid = Utils.generateUUID;
+            feedBack.userUniqueid = session.getAttribute("uniqueid") as String;
+            feedBack.createTime = new Date();
+            context.submit;
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        }
+        return result;
+    }
+}

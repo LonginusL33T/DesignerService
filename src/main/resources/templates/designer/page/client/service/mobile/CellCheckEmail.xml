@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="CellCheckEmail" title="检查用户是否存在" path="branch"  jellyinject="client.service.mobile.CellCheckEmail"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="CellFwSendValidateCode" title="忘记密码发送验证码" path="branch"  jellyinject="client.service.mobile.CellFwSendValidateCode"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

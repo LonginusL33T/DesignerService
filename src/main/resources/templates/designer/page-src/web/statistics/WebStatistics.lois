@@ -1,0 +1,205 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import java.util.List
+import com.aolc.designer.MstApplyMapping
+import java.util.Date
+
+PAGE WebStatistics(title="数据统计",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        //设计师区域
+        //欧洲
+        var franchDesignersSql = "select count(uniqueid) from DAcctUserPro u where u.country = '法国' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var italyDesignersSql = "select count(uniqueid) from DAcctUserPro u where u.country = '意大利' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var germanyDesignersSql = "select count(uniqueid) from DAcctUserPro u where u.country = '德国' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var englishDesignersSql = "select count(uniqueid) from DAcctUserPro u where u.country = '英国' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+
+        //亚洲
+        var chinaDesignersSql = "select count(uniqueid) from DAcctUserPro u where u.country = '中国' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var koreaDesignersSql = "select count(uniqueid) from DAcctUserPro u where u.country = '韩国' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var japanDesignersSql = "select count(uniqueid) from DAcctUserPro u where u.country = '日本' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var singaporeDesignersSql = "select count(uniqueid) from DAcctUserPro u where u.country = '新加坡' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+
+        //美洲
+        var americaDesignersSql = "select count(uniqueid) from DAcctUserPro u where u.country = '美国' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var argentinaDesignersSql = "select count(uniqueid) from DAcctUserPro u where u.country = '阿根廷' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+
+        //大洋洲
+        var australiaDesignersSql = "select count(uniqueid) from DAcctUserPro u where u.country = '澳大利亚' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var newZealandDesignersSql = "select count(uniqueid) from DAcctUserPro u where u.country = '新西兰' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        //其他
+        var otherDesignersSql = "select count(uniqueid) from DAcctUserPro u where u.country = '其他' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+
+        //设计师年龄
+        var now = new Date();
+        var year20 = new Date(now.getYear-20,now.getMonth,now.getDate);
+        var year30 = new Date(now.getYear-30,now.getMonth,now.getDate);
+        var year40 = new Date(now.getYear-40,now.getMonth,now.getDate);
+        var year50 = new Date(now.getYear-50,now.getMonth,now.getDate);
+
+        var less20 = "select count(uniqueid) from DAcctUserPro u where u.birthTime > '"+utils.toDateString(year20)+"' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )" ;
+        var more20less30 = "select count(uniqueid) from DAcctUserPro u where u.birthTime between '"+utils.toDateString(year30)+"' and '"+utils.toDateString(year20)+"' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )"
+        var more30less40 = "select count(uniqueid) from DAcctUserPro u where u.birthTime between '"+utils.toDateString(year40)+"' and '"+utils.toDateString(year30)+"' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )"
+        var more40less50 = "select count(uniqueid) from DAcctUserPro u where u.birthTime between '"+utils.toDateString(year50)+"' and '"+utils.toDateString(year40)+"' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )"
+        var more50 = "select count(uniqueid) from DAcctUserPro u where u.birthTime < '"+utils.toDateString(year50)+"' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+
+        //设计类型
+        var chengyi = "select count(uniqueid) from DAcctUserPro u where u.designType = '成衣' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )" ;
+        var peishi = "select count(uniqueid) from DAcctUserPro u where u.designType = '配饰' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )"
+        var zhubao = "select count(uniqueid) from DAcctUserPro u where u.designType = '珠宝' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )"
+        var jiaju = "select count(uniqueid) from DAcctUserPro u where u.designType ='家居' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )"
+        var xiangbao = "select count(uniqueid) from DAcctUserPro u where u.designType ='箱包' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var xingxiang = "select count(uniqueid) from DAcctUserPro u where u.designType ='形象' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var other = "select count(uniqueid) from DAcctUserPro u where u.designType = '其他' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' ) ";
+
+        //设计师类型
+        var free = "select count(uniqueid) from DAcctUser u where u.category = 'free' and u.status='accept'" ;
+        var production = "select count(uniqueid) from DAcctUser u where u.category = 'production' and u.status='accept'"
+        var graduate = "select count(uniqueid) from DAcctUser u where u.category = 'graduate' and u.status='accept'"
+
+        //企业数据统计
+        //欧洲
+        var franchCompanySql = "select count(uniqueid) from DAcctUserCompany u where u.registionPlace = '法国' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var italyCompanySql = "select count(uniqueid) from DAcctUserCompany u where u.registionPlace = '意大利' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var germanyCompanySql = "select count(uniqueid) from DAcctUserCompany u where u.registionPlace = '德国' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var englishCompanySql = "select count(uniqueid) from DAcctUserCompany u where u.registionPlace = '英国' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+
+        //亚洲
+        var chinaCompanySql = "select count(uniqueid) from DAcctUserCompany u where u.registionPlace = '中国' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var koreaCompanySql = "select count(uniqueid) from DAcctUserCompany u where u.registionPlace = '韩国' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var japanCompanySql = "select count(uniqueid) from DAcctUserCompany u where u.registionPlace = '日本' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var singaporeCompanySql = "select count(uniqueid) from DAcctUserCompany u where u.registionPlace = '新加坡' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+
+        //美洲
+        var americaCompanySql = "select count(uniqueid) from DAcctUserCompany u where u.registionPlace = '美国' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var argentinaCompanySql = "select count(uniqueid) from DAcctUserCompany u where u.registionPlace = '阿根廷' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+
+        //大洋洲
+        var australiaCompanySql = "select count(uniqueid) from DAcctUserCompany u where u.registionPlace = '澳大利亚' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var newZealandCompanySql = "select count(uniqueid) from DAcctUserCompany u where u.registionPlace = '新西兰' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        //其他
+        var otherCompanySql = "select count(uniqueid) from DAcctUserCompany u where u.registionPlace = '其他' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+
+        //企业性质统计
+        var seoSql = "select count(uniqueid) from DAcctUserCompany u where u.enterpriseNature ='国企' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var heziSql = "select count(uniqueid) from DAcctUserCompany u where u.enterpriseNature ='合资' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var waiziSql = "select count(uniqueid) from DAcctUserCompany u where u.enterpriseNature ='外资' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var mingqiSql = "select count(uniqueid) from DAcctUserCompany u where u.enterpriseNature ='民企' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var zhengfujigouSql = "select count(uniqueid) from DAcctUserCompany u where u.enterpriseNature ='政府机关' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var shiyedanweiSql = "select count(uniqueid) from DAcctUserCompany u where u.enterpriseNature ='事业单位' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var shangshigongsiSql = "select count(uniqueid) from DAcctUserCompany u where u.enterpriseNature ='上市公司' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var chuangyegongsiSql = "select count(uniqueid) from DAcctUserCompany u where u.enterpriseNature ='创业公司' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+        var feiyinglijigouSql = "select count(uniqueid) from DAcctUserCompany u where u.enterpriseNature ='非营利机构' and u.userUniqueid in (select us.uniqueid from DAcctUser us where us.status ='accept' )";
+
+        var designer = new HashMap();
+        var areaEurope = new HashMap();
+        var areaAsia = new HashMap();
+        var areaAmerica= new HashMap();
+        var areaOceania= new HashMap();
+        var area = new HashMap();
+        var loader = context.databaseLoader;
+        //欧洲
+        areaEurope.put("franch",loader.getQueryTotalCount(franchDesignersSql));
+        areaEurope.put("italy",loader.getQueryTotalCount(italyDesignersSql));
+        areaEurope.put("germany",loader.getQueryTotalCount(germanyDesignersSql));
+        areaEurope.put("english",loader.getQueryTotalCount(englishDesignersSql));
+        //亚洲
+        areaAsia.put("china",loader.getQueryTotalCount(chinaDesignersSql));
+        areaAsia.put("korea",loader.getQueryTotalCount(koreaDesignersSql));
+        areaAsia.put("japan",loader.getQueryTotalCount(japanDesignersSql));
+        areaAsia.put("singapore",loader.getQueryTotalCount(singaporeDesignersSql));
+        //美洲
+        areaAmerica.put("america",loader.getQueryTotalCount(americaDesignersSql));
+        areaAmerica.put("argentina",loader.getQueryTotalCount(argentinaDesignersSql));
+        //大洋洲
+        areaOceania.put("australia",loader.getQueryTotalCount(australiaDesignersSql));
+        areaOceania.put("newZealand",loader.getQueryTotalCount(newZealandDesignersSql));
+        area.put("europe",areaEurope);
+        area.put("america",areaAmerica);
+        area.put("oceania",areaOceania);
+        area.put("asia",areaAsia);
+        area.put("other",loader.getQueryTotalCount(otherDesignersSql));
+
+        designer.put("area",area);
+
+        //年龄段统计
+        var age = new HashMap();
+        age.put("less20",loader.getQueryTotalCount(less20));
+        age.put("more20less30",loader.getQueryTotalCount(more20less30));
+        age.put("more30less40",loader.getQueryTotalCount(more30less40));
+        age.put("more40less50",loader.getQueryTotalCount(more40less50));
+        age.put("more50",loader.getQueryTotalCount(more50));
+
+        designer.put("age",age);
+
+        //设计类型
+        var designerTypes = new HashMap();
+        designerTypes.put("chengyi",loader.getQueryTotalCount(chengyi));
+        designerTypes.put("peishi",loader.getQueryTotalCount(peishi));
+        designerTypes.put("zhubao",loader.getQueryTotalCount(zhubao));
+        designerTypes.put("jiaju",loader.getQueryTotalCount(jiaju));
+        designerTypes.put("xiangbao",loader.getQueryTotalCount(xiangbao));
+        designerTypes.put("xingxiang",loader.getQueryTotalCount(xingxiang));
+        designerTypes.put("other",loader.getQueryTotalCount(other));
+        designer.put("design_type",designerTypes);
+        //设计师类型
+        var types = new HashMap();
+        types.put("free",loader.getQueryTotalCount(free));
+        types.put("production",loader.getQueryTotalCount(production));
+        types.put("graduate",loader.getQueryTotalCount(graduate));
+        designer.put("categroy",types);
+
+        var company = new HashMap();
+        var areaCompanyEurope = new HashMap();
+        var areaCompanyAsia = new HashMap();
+        var areaCompanyAmerica= new HashMap();
+        var areaCompanyOceania= new HashMap();
+        var areaCompany = new HashMap();
+        //欧洲
+        areaCompanyEurope.put("franch",loader.getQueryTotalCount(franchCompanySql));
+        areaCompanyEurope.put("italy",loader.getQueryTotalCount(italyCompanySql));
+        areaCompanyEurope.put("germany",loader.getQueryTotalCount(germanyCompanySql));
+        areaCompanyEurope.put("english",loader.getQueryTotalCount(englishCompanySql));
+        //亚洲
+        areaCompanyAsia.put("china",loader.getQueryTotalCount(chinaCompanySql));
+        areaCompanyAsia.put("korea",loader.getQueryTotalCount(koreaCompanySql));
+        areaCompanyAsia.put("japan",loader.getQueryTotalCount(japanCompanySql));
+        areaCompanyAsia.put("singapore",loader.getQueryTotalCount(singaporeCompanySql));
+        //美洲
+        areaCompanyAmerica.put("america",loader.getQueryTotalCount(americaCompanySql));
+        areaCompanyAmerica.put("argentina",loader.getQueryTotalCount(argentinaCompanySql));
+        //大洋洲
+        areaCompanyOceania.put("australia",loader.getQueryTotalCount(australiaCompanySql));
+        areaCompanyOceania.put("newZealand",loader.getQueryTotalCount(newZealandCompanySql));
+        areaCompany.put("europe",areaCompanyEurope);
+        areaCompany.put("america",areaCompanyAmerica);
+        areaCompany.put("oceania",areaCompanyOceania);
+        areaCompany.put("asia",areaCompanyAsia);
+        areaCompany.put("other",loader.getQueryTotalCount(otherCompanySql));
+        company.put("area",areaCompany);
+        var natures = new HashMap();
+        natures.put("guoqi",loader.getQueryTotalCount(seoSql));
+        natures.put("hezi",loader.getQueryTotalCount(heziSql));
+        natures.put("waizi",loader.getQueryTotalCount(waiziSql));
+        natures.put("mingqi",loader.getQueryTotalCount(mingqiSql));
+        natures.put("zhengfujigou",loader.getQueryTotalCount(zhengfujigouSql));
+        natures.put("shiyedanwei",loader.getQueryTotalCount(shiyedanweiSql));
+        natures.put("shangshigongsi",loader.getQueryTotalCount(shangshigongsiSql));
+        natures.put("chuangyegongsi",loader.getQueryTotalCount(chuangyegongsiSql));
+        natures.put("shangshigongsi",loader.getQueryTotalCount(shangshigongsiSql));
+        natures.put("feiyinglijigou",loader.getQueryTotalCount(feiyinglijigouSql));
+        company.put("natures",natures);
+
+        var statistics = new HashMap();
+        statistics.put("designer",designer);
+        statistics.put("company",company);
+        result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        result.put("statistics",statistics);
+
+        return result;
+    }
+}

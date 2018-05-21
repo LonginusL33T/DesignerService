@@ -1,0 +1,63 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import java.util.List
+import com.aolc.designer.AcctUserCompany
+import com.aolc.designer.AcctUser
+import com.aolc.designer.MstRecruit
+import com.aolc.designer.MstApplyMapping
+import com.aolc.designer.MstFeedback
+import com.aolc.designer.MstCompanyApplyMapping
+
+PAGE WebDeleteCompany(title="删除企业",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var uniqueid = request.get("uniqueid");
+        if(uniqueid==null || StringUtils.isBlank(uniqueid+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            if(uniqueid instanceof List){
+                for(id : uniqueid){
+                    var user = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid ='"+id+"'");
+                    var userPro = context.databaseLoader.getEntityByCondition(AcctUserCompany,"userUniqueid ='"+id+"'");
+                    var recurits = context.databaseLoader.getByCondition(MstRecruit,"userUniqueid ='"+id+"'");
+                    var feedbacks = context.databaseLoader.getByCondition(MstFeedback,"userUniqueid='"+id+"'");
+                    var applys = context.databaseLoader.getByCondition(MstCompanyApplyMapping,"userUniqueid='"+id+"'");
+                    context.databaseLoader.delete(user);
+                    context.databaseLoader.delete(userPro);
+                    context.databaseLoader.deleteAll(feedbacks);
+                    context.databaseLoader.deleteAll(applys);
+                    for(recurit : recurits){
+                        var applysMappings = context.databaseLoader.getByCondition(MstApplyMapping,"jobUniqueid ='"+recurit.uniqueid+"'");
+                        context.databaseLoader.deleteAll(applysMappings);
+                    }
+                    context.databaseLoader.deleteAll(recurits);
+                    context.submit();
+                }
+            }else{
+                var user = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid ='"+uniqueid+"'");
+                var userPro = context.databaseLoader.getEntityByCondition(AcctUserCompany,"userUniqueid ='"+uniqueid+"'");
+                var recurits = context.databaseLoader.getByCondition(MstRecruit,"userUniqueid ='"+uniqueid+"'");
+                var feedbacks = context.databaseLoader.getByCondition(MstFeedback,"userUniqueid='"+uniqueid+"'");
+                var applys = context.databaseLoader.getByCondition(MstCompanyApplyMapping,"userUniqueid='"+uniqueid+"'");
+
+                context.databaseLoader.delete(user);
+                context.databaseLoader.delete(userPro);
+                for(recurit : recurits){
+                    var applysMappings = context.databaseLoader.getByCondition(MstApplyMapping,"jobUniqueid ='"+recurit.uniqueid+"'");
+                    context.databaseLoader.deleteAll(applysMappings);
+                }
+                context.databaseLoader.deleteAll(recurits);
+                context.databaseLoader.deleteAll(feedbacks);
+                context.databaseLoader.deleteAll(applys);
+                context.submit();
+            }
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        }
+        return result;
+    }
+}

@@ -1,0 +1,31 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.mesh.MeshManager
+
+PAGE WebLogin(title="用户登录",path="branch",checktoken="false") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var username = request.get("username");
+        var password = request.get("password");
+        if(StringUtils.isBlank(username+"")||StringUtils.isBlank(password+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            context.login(username+"",password+"");
+            if(session==null){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_USERNAME_OR_PASSWORD_ERROR);
+                result.put(Constants.MESSAGE,i18n.get("username_or_password"));
+            }else{
+                var meshToken = MeshManager.userLogin;
+                result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+                result.put(Constants.TOKEN,session.token);
+                result.put(Constants.MESH_TOKEN,meshToken);
+            }
+        }
+        return result;
+    }
+}

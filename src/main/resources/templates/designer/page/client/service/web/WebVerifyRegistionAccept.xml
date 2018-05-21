@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="WebVerifyRegistionAccept" title="审核通过" path="branch"  jellyinject="client.service.web.WebVerifyRegistionAccept"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-map xmlns="http://cayenne.apache.org/schema/3.0/modelMap"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://cayenne.apache.org/schema/3.0/modelMap http://cayenne.apache.org/schema/3.0/modelMap.xsd"
+	 project-version="6">
+	<property name="defaultPackage" value="com.aolc.designer"/>
+	<db-entity name="acct_attance" catalog="designer">
+		<db-attribute name="description" type="VARCHAR" length="512"/>
+		<db-attribute name="resourse_token" type="VARCHAR" length="512"/>
+		<db-attribute name="type" type="VARCHAR" length="128"/>
+		<db-attribute name="uniqueid" type="VARCHAR" isPrimaryKey="true" isMandatory="true" length="255"/>
+		<db-attribute name="user_uniqueid" type="VARCHAR" length="512"/>
+	</db-entity>
+	<db-entity name="acct_user" catalog="designer">
+		<db-attribute name="avatar" type="VARCHAR" length="255"/>
+		<db-attribute name="category" type="VARCHAR" length="128"/>
+		<db-attribute name="create_time" type="TIMESTAMP" length="19"/>
+		<db-attribute name="password" type="VARCHAR" length="512"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="status" type="VARCHAR" length="128"/>
+		<db-attribute name="type" type="VARCHAR" length="128"/>
+		<db-attribute name="uniqueid" type="VARCHAR" isMandatory="true" length="512"/>
+		<db-attribute name="upload" type="INTEGER" isMandatory="true" length="10"/>
+		<db-attribute name="username" type="VARCHAR" length="512"/>
+		<db-attribute name="verify_time" type="TIMESTAMP" length="19"/>
+	</db-entity>
+	<db-entity name="acct_user_company" catalog="designer">
+		<db-attribute name="address" type="VARCHAR" length="1024"/>
+		<db-attribute name="brand_name" type="VARCHAR" length="512"/>
+		<db-attribute name="brand_num" type="VARCHAR" length="125"/>
+		<db-attribute name="business_contact_card" type="VARCHAR" length="255"/>
+		<db-attribute name="business_licence" type="VARCHAR" length="255"/>
+		<db-attribute name="connect_telephone" type="VARCHAR" length="128"/>
+		<db-attribute name="email" type="VARCHAR" length="128"/>
+		<db-attribute name="enterprise_nature" type="VARCHAR" length="128"/>
+		<db-attribute name="name" type="VARCHAR" length="255"/>
+		<db-attribute name="organization_code_certificate" type="VARCHAR" length="255"/>
+		<db-attribute name="registion_place" type="VARCHAR" length="512"/>
+		<db-attribute name="size" type="VARCHAR" length="128"/>
+		<db-attribute name="tax_registration_certificate" type="VARCHAR" length="255"/>
+		<db-attribute name="telephone" type="VARCHAR" length="128"/>
+		<db-attribute name="uniqueid" type="VARCHAR" isPrimaryKey="true" isMandatory="true" length="255"/>
+		<db-attribute name="user_uniqueid" type="VARCHAR" length="512"/>
+	</db-entity>
+	<db-entity name="acct_user_pro" catalog="designer">
+		<db-attribute name="address" type="VARCHAR" length="1024"/>
+		<db-attribute name="agent" type="VARCHAR" length="128"/>
+		<db-attribute name="birth_place" type="VARCHAR" length="1024"/>
+		<db-attribute name="birth_time" type="TIMESTAMP" isMandatory="true" length="19"/>
+		<db-attribute name="brand_name" type="VARCHAR" length="512"/>
+		<db-attribute name="college" type="VARCHAR" length="512"/>
+		<db-attribute name="country" type="VARCHAR" length="128"/>
+		<db-attribute name="country_code" type="VARCHAR" length="128"/>
+		<db-attribute name="design_style" type="VARCHAR" length="512"/>
+		<db-attribute name="design_type" type="VARCHAR" length="128"/>
+		<db-attribute name="email" type="VARCHAR" length="255"/>
+		<db-attribute name="experience" type="LONGVARCHAR" length="65535"/>
+		<db-attribute name="first_name" type="VARCHAR" length="255"/>
+		<db-attribute name="graduate" type="VARCHAR" length="255"/>
+		<db-attribute name="home_page" type="VARCHAR" length="512"/>
+		<db-attribute name="instagram" type="VARCHAR" length="255"/>
+		<db-attribute name="name" type="VARCHAR" length="255"/>
+		<db-attribute name="other" type="VARCHAR" length="255"/>
+		<db-attribute name="production" type="INTEGER" length="10"/>
+		<db-attribute name="profession" type="VARCHAR" length="255"/>
+		<db-attribute name="regitration_place" type="VARCHAR" length="1024"/>
+		<db-attribute name="regitration_time" type="TIMESTAMP" length="19"/>
+		<db-attribute name="user_background" type="VARCHAR" length="255"/>
+		<db-attribute name="resume" type="VARCHAR" length="255"/>
+		<db-attribute name="school" type="VARCHAR" length="255"/>
+		<db-attribute name="telephone" type="VARCHAR" length="128"/>
+		<db-attribute name="uniqueid" type="VARCHAR" isPrimaryKey="true" isMandatory="true" length="255"/>
+		<db-attribute name="user_uniqueid" type="VARCHAR" length="512"/>
+		<db-attribute name="works" type="VARCHAR" length="255"/>
+	</db-entity>
+	<db-entity name="mst_advertisement" catalog="designer">
+		<db-attribute name="name" type="VARCHAR" length="255"/>
+		<db-attribute name="sid" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="source" type="VARCHAR" length="255"/>
+		<db-attribute name="time" type="TIMESTAMP" length="19"/>
+	</db-entity>
+	<db-entity name="mst_apply_mapping" catalog="designer">
+		<db-attribute name="create_time" type="TIMESTAMP" isMandatory="true" length="19"/>
+		<db-attribute name="job_uniqueid" type="VARCHAR" length="512"/>
+		<db-attribute name="resume" type="VARCHAR" length="256"/>
+		<db-attribute name="status" type="VARCHAR" length="128"/>
+		<db-attribute name="uniqueid" type="VARCHAR" isPrimaryKey="true" isMandatory="true" length="255"/>
+		<db-attribute name="user_uniqueid" type="VARCHAR" length="512"/>
+		<db-attribute name="is_send_by_company" type="INTEGER" length="10"/>
+	</db-entity>
+	<db-entity name="mst_company_apply_mapping" catalog="designer">
+		<db-attribute name="create_time" type="TIMESTAMP" length="19"/>
+		<db-attribute name="em_uniqueid" type="VARCHAR" length="128"/>
+		<db-attribute name="status" type="VARCHAR" length="128"/>
+		<db-attribute name="uniqueid" type="VARCHAR" isPrimaryKey="true" isMandatory="true" length="128"/>
+		<db-attribute name="user_uniqueid" type="VARCHAR" length="128"/>
+	</db-entity>
+	<db-entity name="mst_category" catalog="designer">
+		<db-attribute name="code" type="VARCHAR" length="128"/>
+		<db-attribute name="description" type="VARCHAR" length="1024"/>
+		<db-attribute name="node_uniqueid" type="VARCHAR" length="128"/>
+		<db-attribute name="project" type="VARCHAR" length="255"/>
+	</db-entity>
+	<db-entity name="mst_feedback" catalog="designer">
+		<db-attribute name="create_time" type="TIMESTAMP" isMandatory="true" length="19"/>
+		<db-attribute name="feedback" type="LONGVARCHAR" length="65535"/>
+		<db-attribute name="image1" type="VARCHAR" length="255"/>
+		<db-attribute name="image2" type="VARCHAR" length="255"/>
+		<db-attribute name="image3" type="VARCHAR" length="255"/>
+		<db-attribute name="uniqueid" type="VARCHAR" isPrimaryKey="true" isMandatory="true" length="255"/>
+		<db-attribute name="user_uniqueid" type="VARCHAR" isMandatory="true" length="255"/>
+	</db-entity>
+	<db-entity name="mst_recruit" catalog="designer">
+		<db-attribute name="address" type="VARCHAR" length="255"/>
+		<db-attribute name="category" type="VARCHAR" length="255"/>
+		<db-attribute name="compensation_benefit" type="VARCHAR" length="255"/>
+		<db-attribute name="create_time" type="TIMESTAMP" length="19"/>
+		<db-attribute name="educational_requirements" type="VARCHAR" length="255"/>
+		<db-attribute name="experience" type="VARCHAR" length="1024"/>
+		<db-attribute name="job_detail" type="VARCHAR" length="1024"/>
+		<db-attribute name="skills_requirements" type="VARCHAR" length="255"/>
+		<db-attribute name="status" type="VARCHAR" length="255"/>
+		<db-attribute name="tags" type="VARCHAR" length="255"/>
+		<db-attribute name="title" type="VARCHAR" length="255"/>
+		<db-attribute name="uniqueid" type="VARCHAR" isPrimaryKey="true" isMandatory="true" length="128"/>
+		<db-attribute name="user_uniqueid" type="VARCHAR" length="128"/>
+	</db-entity>
+	<db-entity name="mst_tags" catalog="designer">
+		<db-attribute name="description" type="VARCHAR" length="512"/>
+		<db-attribute name="name" type="VARCHAR" length="256"/>
+		<db-attribute name="uniqueid" type="VARCHAR" isPrimaryKey="true" isMandatory="true" length="128"/>
+		<db-attribute name="user_uniqueid" type="VARCHAR" length="128"/>
+	</db-entity>
+	<obj-entity name="DAcctAttance" className="com.aolc.designer.AcctAttance" dbEntityName="acct_attance">
+		<obj-attribute name="description" type="java.lang.String" db-attribute-path="description"/>
+		<obj-attribute name="resourseToken" type="java.lang.String" db-attribute-path="resourse_token"/>
+		<obj-attribute name="type" type="java.lang.String" db-attribute-path="type"/>
+		<obj-attribute name="uniqueid" type="java.lang.String" db-attribute-path="uniqueid"/>
+		<obj-attribute name="userUniqueid" type="java.lang.String" db-attribute-path="user_uniqueid"/>
+	</obj-entity>
+	<obj-entity name="DAcctUser" className="com.aolc.designer.AcctUser" dbEntityName="acct_user">
+		<obj-attribute name="avatar" type="java.lang.String" db-attribute-path="avatar"/>
+		<obj-attribute name="category" type="java.lang.String" db-attribute-path="category"/>
+		<obj-attribute name="createTime" type="java.util.Date" db-attribute-path="create_time"/>
+		<obj-attribute name="password" type="java.lang.String" db-attribute-path="password"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+		<obj-attribute name="status" type="java.lang.String" db-attribute-path="status"/>
+		<obj-attribute name="type" type="java.lang.String" db-attribute-path="type"/>
+		<obj-attribute name="uniqueid" type="java.lang.String" db-attribute-path="uniqueid"/>
+		<obj-attribute name="upload" type="java.lang.Integer" db-attribute-path="upload"/>
+		<obj-attribute name="username" type="java.lang.String" db-attribute-path="username"/>
+		<obj-attribute name="verifyTime" type="java.util.Date" db-attribute-path="verify_time"/>
+	</obj-entity>
+	<obj-entity name="DAcctUserCompany" className="com.aolc.designer.AcctUserCompany" dbEntityName="acct_user_company">
+		<obj-attribute name="address" type="java.lang.String" db-attribute-path="address"/>
+		<obj-attribute name="brandName" type="java.lang.String" db-attribute-path="brand_name"/>
+		<obj-attribute name="brandNum" type="java.lang.String" db-attribute-path="brand_num"/>
+		<obj-attribute name="businessContactCard" type="java.lang.String" db-attribute-path="business_contact_card"/>
+		<obj-attribute name="businessLicence" type="java.lang.String" db-attribute-path="business_licence"/>
+		<obj-attribute name="connectTelephone" type="java.lang.String" db-attribute-path="connect_telephone"/>
+		<obj-attribute name="email" type="java.lang.String" db-attribute-path="email"/>
+		<obj-attribute name="enterpriseNature" type="java.lang.String" db-attribute-path="enterprise_nature"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="organizationCodeCertificate" type="java.lang.String" db-attribute-path="organization_code_certificate"/>
+		<obj-attribute name="registionPlace" type="java.lang.String" db-attribute-path="registion_place"/>
+		<obj-attribute name="size" type="java.lang.String" db-attribute-path="size"/>
+		<obj-attribute name="taxRegistrationCertificate" type="java.lang.String" db-attribute-path="tax_registration_certificate"/>
+		<obj-attribute name="telephone" type="java.lang.String" db-attribute-path="telephone"/>
+		<obj-attribute name="uniqueid" type="java.lang.String" db-attribute-path="uniqueid"/>
+		<obj-attribute name="userUniqueid" type="java.lang.String" db-attribute-path="user_uniqueid"/>
+	</obj-entity>
+	<obj-entity name="DAcctUserPro" className="com.aolc.designer.AcctUserPro" dbEntityName="acct_user_pro">
+		<obj-attribute name="address" type="java.lang.String" db-attribute-path="address"/>
+		<obj-attribute name="agent" type="java.lang.String" db-attribute-path="agent"/>
+		<obj-attribute name="birthPlace" type="java.lang.String" db-attribute-path="birth_place"/>
+		<obj-attribute name="birthTime" type="java.util.Date" db-attribute-path="birth_time"/>
+		<obj-attribute name="brandName" type="java.lang.String" db-attribute-path="brand_name"/>
+		<obj-attribute name="college" type="java.lang.String" db-attribute-path="college"/>
+		<obj-attribute name="country" type="java.lang.String" db-attribute-path="country"/>
+		<obj-attribute name="countryCode" type="java.lang.String" db-attribute-path="country_code"/>
+		<obj-attribute name="designStyle" type="java.lang.String" db-attribute-path="design_style"/>
+		<obj-attribute name="designType" type="java.lang.String" db-attribute-path="design_type"/>
+		<obj-attribute name="email" type="java.lang.String" db-attribute-path="email"/>
+		<obj-attribute name="experience" type="java.lang.String" db-attribute-path="experience"/>
+		<obj-attribute name="firstName" type="java.lang.String" db-attribute-path="first_name"/>
+		<obj-attribute name="graduate" type="java.lang.String" db-attribute-path="graduate"/>
+		<obj-attribute name="homePage" type="java.lang.String" db-attribute-path="home_page"/>
+		<obj-attribute name="instagram" type="java.lang.String" db-attribute-path="instagram"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="other" type="java.lang.String" db-attribute-path="other"/>
+		<obj-attribute name="production" type="java.lang.Integer" db-attribute-path="production"/>
+		<obj-attribute name="profession" type="java.lang.String" db-attribute-path="profession"/>
+		<obj-attribute name="regitrationPlace" type="java.lang.String" db-attribute-path="regitration_place"/>
+		<obj-attribute name="regitrationTime" type="java.util.Date" db-attribute-path="regitration_time"/>
+		<obj-attribute name="userBackground" type="java.lang.String" db-attribute-path="user_background"/>
+		<obj-attribute name="resume" type="java.lang.String" db-attribute-path="resume"/>
+		<obj-attribute name="school" type="java.lang.String" db-attribute-path="school"/>
+		<obj-attribute name="telephone" type="java.lang.String" db-attribute-path="telephone"/>
+		<obj-attribute name="uniqueid" type="java.lang.String" db-attribute-path="uniqueid"/>
+		<obj-attribute name="userUniqueid" type="java.lang.String" db-attribute-path="user_uniqueid"/>
+		<obj-attribute name="works" type="java.lang.String" db-attribute-path="works"/>
+	</obj-entity>
+	<obj-entity name="MstApplyMapping" className="com.aolc.designer.MstApplyMapping" dbEntityName="mst_apply_mapping">
+		<obj-attribute name="createTime" type="java.util.Date" db-attribute-path="create_time"/>
+		<obj-attribute name="jobUniqueid" type="java.lang.String" db-attribute-path="job_uniqueid"/>
+		<obj-attribute name="resume" type="java.lang.String" db-attribute-path="resume"/>
+		<obj-attribute name="status" type="java.lang.String" db-attribute-path="status"/>
+		<obj-attribute name="uniqueid" type="java.lang.String" db-attribute-path="uniqueid"/>
+		<obj-attribute name="userUniqueid" type="java.lang.String" db-attribute-path="user_uniqueid"/>
+		<obj-attribute name="isSendByCompany" type="java.lang.Integer" db-attribute-path="is_send_by_company"/>
+	</obj-entity>
+	<obj-entity name="MstAdvertisement" className="com.aolc.designer.MstAdvertisement" dbEntityName="mst_advertisement">
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="sid" type="java.lang.Integer" db-attribute-path="sid"/>
+		<obj-attribute name="source" type="java.lang.String" db-attribute-path="source"/>
+		<obj-attribute name="time" type="java.util.Date" db-attribute-path="time"/>
+	</obj-entity>
+	<obj-entity name="MstCategory" className="com.aolc.designer.MstCategory" dbEntityName="mst_category">
+		<obj-attribute name="code" type="java.lang.String" db-attribute-path="code"/>
+		<obj-attribute name="description" type="java.lang.String" db-attribute-path="description"/>
+		<obj-attribute name="nodeUniqueid" type="java.lang.String" db-attribute-path="node_uniqueid"/>
+		<obj-attribute name="project" type="java.lang.String" db-attribute-path="project"/>
+	</obj-entity>
+	<obj-entity name="MstFeedback" className="com.aolc.designer.MstFeedback" dbEntityName="mst_feedback">
+		<obj-attribute name="createTime" type="java.util.Date" db-attribute-path="create_time"/>
+		<obj-attribute name="feedback" type="java.lang.String" db-attribute-path="feedback"/>
+		<obj-attribute name="image1" type="java.lang.String" db-attribute-path="image1"/>
+		<obj-attribute name="image2" type="java.lang.String" db-attribute-path="image2"/>
+		<obj-attribute name="image3" type="java.lang.String" db-attribute-path="image3"/>
+		<obj-attribute name="uniqueid" type="java.lang.String" db-attribute-path="uniqueid"/>
+		<obj-attribute name="userUniqueid" type="java.lang.String" db-attribute-path="user_uniqueid"/>
+	</obj-entity>
+	<obj-entity name="MstRecruit" className="com.aolc.designer.MstRecruit" dbEntityName="mst_recruit">
+		<obj-attribute name="address" type="java.lang.String" db-attribute-path="address"/>
+		<obj-attribute name="category" type="java.lang.String" db-attribute-path="category"/>
+		<obj-attribute name="compensationBenefit" type="java.lang.String" db-attribute-path="compensation_benefit"/>
+		<obj-attribute name="createTime" type="java.util.Date" db-attribute-path="create_time"/>
+		<obj-attribute name="educationalRequirements" type="java.lang.String" db-attribute-path="educational_requirements"/>
+		<obj-attribute name="experience" type="java.lang.String" db-attribute-path="experience"/>
+		<obj-attribute name="jobDetail" type="java.lang.String" db-attribute-path="job_detail"/>
+		<obj-attribute name="skillsRequirements" type="java.lang.String" db-attribute-path="skills_requirements"/>
+		<obj-attribute name="tags" type="java.lang.String" db-attribute-path="tags"/>
+		<obj-attribute name="status" type="java.lang.String" db-attribute-path="status"/>
+		<obj-attribute name="title" type="java.lang.String" db-attribute-path="title"/>
+		<obj-attribute name="uniqueid" type="java.lang.String" db-attribute-path="uniqueid"/>
+		<obj-attribute name="userUniqueid" type="java.lang.String" db-attribute-path="user_uniqueid"/>
+	</obj-entity>
+	<obj-entity name="MstCompanyApplyMapping" className="com.aolc.designer.MstCompanyApplyMapping" dbEntityName="mst_company_apply_mapping">
+		<obj-attribute name="createTime" type="java.util.Date" db-attribute-path="create_time"/>
+		<obj-attribute name="emUniqueid" type="java.lang.String" db-attribute-path="em_uniqueid"/>
+		<obj-attribute name="status" type="java.lang.String" db-attribute-path="status"/>
+		<obj-attribute name="uniqueid" type="java.lang.String" db-attribute-path="uniqueid"/>
+		<obj-attribute name="userUniqueid" type="java.lang.String" db-attribute-path="user_uniqueid"/>
+	</obj-entity>
+	<obj-entity name="MstTags" className="com.aolc.designer.MstTags" dbEntityName="mst_tags">
+		<obj-attribute name="description" type="java.lang.String" db-attribute-path="description"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+		<obj-attribute name="uniqueid" type="java.lang.String" db-attribute-path="uniqueid"/>
+		<obj-attribute name="userUniqueid" type="java.lang.String" db-attribute-path="user_uniqueid"/>
+	</obj-entity>
+</data-map>

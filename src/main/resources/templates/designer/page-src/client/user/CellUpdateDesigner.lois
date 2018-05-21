@@ -1,0 +1,157 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.AcctUser
+import com.aolc.designer.AcctUserPro
+import java.util.Date
+import com.aolc.designer.MstTags
+import com.aolc.designer.utils.Utils
+import org.apache.cayenne.query.EJBQLQuery
+import org.apache.cayenne.ObjectContext
+import cn.smartx.core.ds.database.DBService
+
+PAGE CellUpdateDesigner(title="更新设计师信息",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var uniqueid = session.getAttribute("uniqueid");
+        var name = request.get("name");//姓名
+        var firstName = request.get("first_name");//姓氏
+        var birthTime = request.get("birth_time");//出生日期
+        var birthPlace = request.get("birth_place");//出生地
+        var country = request.get("country");//国籍
+        var countryCode = request.get("country_code");//国籍代码
+        var address = request.get("address");//住址
+        var telephone = request.get("telephone");//电话
+        var email = request.get("email");//邮箱地址
+        var instagram = request.get("instagram");//instagram账号
+        var other = request.get("other");//其他社交平台
+        var homePage = request.get("home_page");//个人主页
+        var works = request.get("works");//个人作品
+        var school = request.get("school");//毕业院校
+        var college = request.get("college");//学院/系
+        var profession = request.get("profession");//专业
+        var graduate = request.get("graduate");//毕业年份
+        var experience = request.get("experience");//其他教育经历
+        var designType = request.get("design_type");//设计类型
+        var designStyle = request.get("design_style");//设计风格
+        var agent = request.get("agent");//当前代理人
+        var regitrationPlace = request.get("regitration_place");//品牌注册地
+        var regitrationTime = request.get("regitration_time");//品牌注册时间
+        var brandName = request.get("brand_name");//品牌名称
+        var resume = request.get("resume");//个人简历
+        //用户类型
+        var production = request.get("production")//每年产出设计系列数量;
+
+        if(uniqueid==null || StringUtils.isBlank(uniqueid+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var userPro = context.databaseLoader.getEntityByCondition(AcctUserPro,"userUniqueid ='"+uniqueid+"'");
+            if(!StringUtils.isBlank(email+"")&&userPro.email!=email){
+                var userCompany = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid = '"+uniqueid+"'");
+                var newCompany = context.databaseLoader.getEntityByCondition(AcctUser,"username = '"+email+"'");
+                userCompany.status = Constants.VERIFING;
+                if(newCompany == null){
+                    userPro.email = email+"";
+                    userCompany.username = email+"";
+                }else{
+                    result.put(Constants.ERROR_CODE,Constants.ERROR_USER_EXIST);
+                    result.put(Constants.MESSAGE,i18n.get("user_exist"));
+                }
+            }
+            if(name!= null && !StringUtils.isBlank(name+"")){
+                userPro.name = name+"";
+            }
+            if(firstName != null && !StringUtils.isBlank(firstName+"")){
+                userPro.firstName = firstName+"";
+            }
+            if(birthTime!=null && !StringUtils.isBlank(birthTime+"")){
+                userPro.birthTime = new Date(Long.parseLong(birthTime+""));
+            }
+            if(birthPlace != null && !StringUtils.isBlank(birthPlace+"")){
+                userPro.birthPlace = birthPlace+"";
+            }
+            if(country != null && !StringUtils.isBlank(country+"")){
+                userPro.country = country+"";
+            }
+            if(countryCode!=null && !StringUtils.isBlank(countryCode+"")){
+                userPro.countryCode = countryCode+"";
+            }
+            if(address!=null && !StringUtils.isBlank(address+"")){
+                userPro.address = address+"";
+            }
+            if(telephone!=null && !StringUtils.isBlank(telephone+"")){
+                userPro.telephone = telephone+"";
+            }
+            if(instagram!=null && !StringUtils.isBlank(instagram+"")){
+                userPro.instagram = instagram+"";
+            }
+            if(other!=null && !StringUtils.isBlank(other+"")){
+                userPro.other = other+"";
+            }
+            if(homePage!=null && !StringUtils.isBlank(homePage+"")){
+                userPro.homePage = homePage+"";
+            }
+            if(school!=null && !StringUtils.isBlank(school+"")){
+                userPro.school = school+"";
+            }
+            if(college!=null && !StringUtils.isBlank(college+"")){
+                userPro.college = college+"";
+            }
+            if(profession!=null && !StringUtils.isBlank(profession+"")){
+                userPro.profession = profession+"";
+            }
+            if(graduate!=null && !StringUtils.isBlank(graduate+"")){
+                userPro.graduate = graduate+"";
+            }
+            if(experience!=null && !StringUtils.isBlank(experience+"")){
+                userPro.experience = experience+"";
+            }
+            if(designType!=null && !StringUtils.isBlank(designType+"")){
+                userPro.designType = designType+"";
+            }
+            if(brandName!=null && !StringUtils.isBlank(brandName+"")){
+                userPro.brandName = brandName+"";
+            }
+            if(regitrationPlace!=null && !StringUtils.isBlank(regitrationPlace+"")){
+                userPro.regitrationPlace = regitrationPlace+"";
+            }
+            if(agent!=null && !StringUtils.isBlank(agent+"")){
+                userPro.agent = agent+"";
+            }
+            if(designStyle!=null && !StringUtils.isBlank(designStyle+"")){
+                userPro.designStyle = designStyle+"";
+                var tags = (designStyle+"").split(",");
+                var EJBQLQuery ejbqlquery = new EJBQLQuery("delete from MstTags t where t.userUniqueid = '"+userPro.userUniqueid+"'");
+                var ObjectContext objectContext = DBService.createDatabaseContext();
+                objectContext.performQuery(ejbqlquery);
+                for(tag:tags){
+                    var newTag = context.databaseLoader.ceateNew(MstTags);
+                    newTag.uniqueid = Utils.generateUUID;
+                    newTag.name = tag;
+                    newTag.userUniqueid = userPro.userUniqueid;
+                }
+            }
+            if(works !=null && !StringUtils.isBlank(works+"")){
+                userPro.works = works +"";
+            }
+            if(resume !=null && !StringUtils.isBlank(resume+"")){
+                userPro.resume = resume+"";
+            }
+            if(regitrationTime!=null && !StringUtils.isBlank(regitrationTime+"")){
+                userPro.regitrationTime = new Date(Long.parseLong(regitrationTime+""))
+            }
+
+            if(production!=null && !StringUtils.isBlank(production+"")){
+                userPro.production = Integer.parseInt(production+"")
+            }
+
+            context.submit;
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        }
+        return result;
+    }
+}

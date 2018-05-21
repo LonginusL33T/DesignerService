@@ -1,0 +1,41 @@
+package client.service.web
+
+import cn.smartx.core.AAA.SmartxSecurityManager
+import java.util.List
+import java.util.ArrayList
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import cn.smartx.core.model.JellyInjectBase
+import cn.smartx.core.AAA.model.User
+PAGE WebAddUserRoles(title="添加用户角色", checktoken="true") extends JellyInjectBase{
+    EVENT SERVICE{
+        var roles = request.get("roles") as List;
+        var loginname = request.get("loginname") as String;
+        var username = request.get("username") as String;
+        var password = request.get("password") as String;
+
+        var result = new HashMap();
+        var userService = SmartxSecurityManager.getInstance.getUserService(context.appCode);
+        var roleService = SmartxSecurityManager.getInstance.getRoleService(context.appCode);
+        var user = userService.findByUsername(loginname);
+        if(user!=null){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_USER_EXIST);
+            result.put(Constants.MESSAGE,i18n.get("user_exist"));
+        }else{
+            user = new User();
+            user.loginname = loginname+"";
+            user.name = username+"";
+            user.password = password+"";
+            user.appcode = context.appCode;
+            userService.createUser(user);
+            var roleList = new ArrayList();
+            for(role:roles){
+                roleList.add(roleService.findRoleBySid(Integer.parseInt(role+"")));
+            }
+            userService.addRoles(user,roleList);
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        }
+
+        return result
+    }
+}

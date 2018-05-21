@@ -1,0 +1,64 @@
+package client.service.mobile
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import java.util.ArrayList
+import org.apache.cayenne.query.Ordering
+import org.apache.cayenne.query.SortOrder
+import com.aolc.designer.MstRecruit
+import com.aolc.designer.MstApplyMapping
+import com.aolc.designer.AcctUser
+import com.aolc.designer.AcctUserCompany
+
+PAGE CellGetApplyByDesigner(title="应聘",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var pagesize = request.get("pagesize");
+        var pagenum = request.get("pagenum");
+        if(pagesize == null || StringUtils.isBlank(pagesize+"")){
+            pagesize = 10;
+        }else{
+            pagesize = Integer.parseInt(pagesize+"");
+        }
+        if(pagenum == null || StringUtils.isBlank(pagenum+"")){
+            pagenum = 0;
+        }else{
+            pagenum = Integer.parseInt(pagenum+"");
+        }
+        var userUniqueid = session.getAttribute("uniqueid");
+        var sql = "userUniqueid = '"+userUniqueid+"'";
+        var String ejbsql = "select count(uniqueid) from MstApplyMapping u where u.userUniqueid='"+userUniqueid+"'";
+
+        var applyUsers = new ArrayList();
+        var orders = new ArrayList();
+        var order = new Ordering("createTime",SortOrder.DESCENDING);
+        orders.add(order);
+        var applys = context.databaseLoader.getByConditionPagination(MstApplyMapping,sql,null,orders,pagesize as Integer,pagenum as Integer);
+        var count = context.databaseLoader.getQueryTotalCount(ejbsql);
+        for(apply :applys){
+            var applyMap = new HashMap();
+            var recruit = context.databaseLoader.getEntityByCondition(MstRecruit,"uniqueid = '"+apply.jobUniqueid+"'");
+            if(recruit!=null){
+                var companyInfo = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid ='"+recruit.userUniqueid+"'");
+                var company = context.databaseLoader.getEntityByCondition(AcctUserCompany,"userUniqueid ='"+recruit.userUniqueid+"'");
+                applyMap.put("uniqueid",apply.jobUniqueid);
+                applyMap.put("category",recruit.category);
+                applyMap.put("tags",recruit.tags);
+                applyMap.put("avatar",context.getResourceThumbUrl(companyInfo.avatar));
+                applyMap.put("enterprise_nature",company.enterpriseNature);
+                applyMap.put("time",utils.toDateString(recruit.createTime));
+                applyMap.put("job_detail",recruit.jobDetail);
+                applyMap.put("status",apply.status);
+                applyMap.put("address",recruit.address);
+                applyMap.put("educational_requirements",recruit.educationalRequirements);
+                applyUsers.add(applyMap);
+            }
+        }
+        result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        result.put(Constants.TOTAL_NUM,count);
+        result.put("apply",applyUsers);
+        return result;
+    }
+}

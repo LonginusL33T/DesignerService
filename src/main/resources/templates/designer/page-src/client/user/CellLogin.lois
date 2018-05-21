@@ -1,0 +1,93 @@
+package client.service.mobile
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.AcctUser
+import com.aolc.designer.AcctUserPro
+import com.aolc.designer.AcctUserCompany
+import com.aolc.designer.utils.MD5
+
+PAGE CellLogin(title="用户登录",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var username = request.get("username");
+        var password = request.get("password");
+        if(username==null
+                ||password == null
+                ||StringUtils.isBlank(username+"")
+                ||StringUtils.isBlank(password+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var user = context.databaseLoader.getEntityByCondition(AcctUser,"username = '"+username+"'");
+            if(user==null){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_USER_NOT_EXIST);
+                result.put(Constants.MESSAGE,i18n.get("user_not_exist"));
+            }else if(user.status == Constants.LOCKED){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_USER_LOCKED);
+                result.put(Constants.MESSAGE,i18n.get("user_locked"));
+            }else if(user.password != MD5.GetMD5Code(password+"")){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_USER_PASSWORD_INCORRECT);
+                result.put(Constants.MESSAGE,i18n.get("user_password_incorrect"));
+            }else{
+                context.login;
+                session.setAttribute("uniqueid",user.uniqueid);
+                result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+                result.put(Constants.TOKEN,session.token);
+                result.put(Constants.AVATAR,context.getResourceUrl(user.avatar));
+                var userinfo = new HashMap();
+                userinfo.put("status",user.status);
+                if(user.category == Constants.COMPANY){
+                    var userpro = context.databaseLoader.getEntityByCondition(AcctUserCompany,"userUniqueid ='"+user.uniqueid+"'")
+                    userinfo.put("username",user.username);
+                    userinfo.put("uniqueid",user.uniqueid);
+                    userinfo.put("category",user.category);
+                    var userDetail = new HashMap();
+                    userDetail.put("name",userpro.name);
+                    userDetail.put("email",userpro.email);
+                    userDetail.put("brand_name",userpro.brandName);
+                    userDetail.put("size",userpro.size);
+                    userDetail.put("telephone",userpro.telephone);
+                    userDetail.put("contact_phone",userpro.connectTelephone);
+                    userDetail.put("address",userpro.address);
+                    userDetail.put("registion_place",userpro.registionPlace);
+                    userinfo.put("detail",userDetail);
+                    result.put(Constants.USER,userinfo);
+                }else if(user.category == Constants.USER){
+                    var userpro = context.databaseLoader.getEntityByCondition(AcctUserPro,"userUniqueid = '"+user.uniqueid+"'");
+                    userinfo.put("username",user.username);
+                    userinfo.put("uniqueid",user.uniqueid);
+                    userinfo.put("category",user.category);
+                    var userDetail = new HashMap();
+                    userDetail.put("name",userpro.name);
+                    userDetail.put("type",user.type);
+                    userDetail.put("email",userpro.email);
+                    userDetail.put("brand_name",userpro.brandName);
+                    userDetail.put("birth_time",userpro.birthTime);
+                    userDetail.put("birth_place",userpro.birthPlace);
+                    userDetail.put("country",userpro.country);
+                    userDetail.put("address",userpro.address);
+                    userDetail.put("telephone",userpro.telephone);
+                    userDetail.put("instagram",userpro.instagram);
+                    userDetail.put("other",userpro.other);
+                    userDetail.put("school",userpro.school);
+                    userDetail.put("college",userpro.college);
+                    userDetail.put("profession",userpro.profession);
+                    userDetail.put("graduate",userpro.graduate);
+                    userDetail.put("design_type",userpro.designType);
+                    userDetail.put("graduate",userpro.graduate);
+                    userDetail.put("agent",userpro.agent);
+                    userDetail.put("regitration_place",userpro.regitrationPlace);
+                    userDetail.put("regitration_time",userpro.regitrationTime);
+                    userinfo.put("detail",userDetail);
+                    result.put(Constants.USER,userinfo);
+                }
+
+            }
+
+        }
+        return result;
+    }
+}

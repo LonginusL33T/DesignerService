@@ -1,0 +1,327 @@
+package client.service.mobile
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.AcctUser
+import com.aolc.designer.utils.Utils
+import com.aolc.designer.utils.MD5
+import com.aolc.designer.AcctUserPro
+import java.util.Date
+import com.aolc.designer.MstTags
+import com.aolc.designer.AcctAttance
+import com.aolc.designer.mesh.MeshManager
+import org.json.JSONObject;
+
+PAGE CellUserRegister(title="普通用户注册",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        //用户信息
+        var name = request.get("name");//姓名
+        var firstName = request.get("first_name");//姓氏
+        var birthTime = request.get("birth_time");//出生日期
+        var birthPlace = request.get("birth_place");//出生地
+        var country = request.get("country");//国籍
+        var countryCode = request.get("country_code");//国籍代码
+        var address = request.get("address");//住址
+        var telephone = request.get("telephone");//电话
+        var email = request.get("email");//邮箱地址
+        var instagram = request.get("instagram");//instagram账号
+        var other = request.get("other");//其他社交平台
+        var homePage = request.get("home_page");//个人主页
+        var works = request.get("works");//个人作品
+        var school = request.get("school");//毕业院校
+        var college = request.get("college");//学院/系
+        var profession = request.get("profession");//专业
+        var graduate = request.get("graduate");//毕业年份
+        var experience = request.get("experience");//其他教育经历
+        var designType = request.get("design_type");//设计类型
+        var designStyle = request.get("design_style");//设计风格
+        var agent = request.get("agent");//当前代理人
+        var regitrationPlace = request.get("regitration_place");//品牌注册地
+        var regitrationTime = request.get("regitration_time");//品牌注册时间
+        var brandName = request.get("brand_name");//品牌名称
+        var resume = request.get("resume");//个人简历
+        var password = request.get("password");//登录密码
+        //用户类型
+        var type = request.get("type");
+        var production = request.get("production")//每年产出设计系列数量;
+        if(type==null||StringUtils.isBlank(type+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,type+i18n.get("param_incorrect"));
+        }else if(Constants.USER_FREE.equals(type)){
+            //自由设计师
+            if(StringUtils.isBlank(name+"")||name==null
+                    ||StringUtils.isBlank(firstName+"")||firstName ==null
+                    ||StringUtils.isBlank(birthTime+"")||birthTime == null
+                    ||StringUtils.isBlank(birthPlace+"")||birthPlace == null
+                    ||StringUtils.isBlank(country+"")|| country == null
+                    ||StringUtils.isBlank(countryCode+"")||countryCode == null
+                    ||StringUtils.isBlank(address+"")|| address == null
+                    ||StringUtils.isBlank(telephone+"")|| telephone == null
+                    ||StringUtils.isBlank(email+"")|| email == null
+                    ||StringUtils.isBlank(works+"")||works == null
+                    ||StringUtils.isBlank(school+"")||school ==null
+                    ||StringUtils.isBlank(college+"")|| college == null
+                    ||StringUtils.isBlank(profession+"")||profession == null
+                    ||StringUtils.isBlank(graduate+"") ||graduate == null
+                    ||StringUtils.isBlank(experience+"")||experience == null
+                    ||StringUtils.isBlank(designStyle+"")||designStyle == null
+                    ||StringUtils.isBlank(designType+"")||designType == null
+                    ||StringUtils.isBlank(password+"")||password == null
+                    ||StringUtils.isBlank(brandName+"")||brandName == null
+                    ||StringUtils.isBlank(regitrationPlace+"") || regitrationPlace == null
+                    ||StringUtils.isBlank(agent+"")||agent == null){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+                result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+            }else{
+                var user = context.databaseLoader.getEntityByCondition(AcctUser,"username = '"+email+"'");
+                if(user!=null){
+                    result.put(Constants.ERROR_CODE,Constants.ERROR_USER_EXIST);
+                    result.put(Constants.MESSAGE,i18n.get("user_exist"));
+                }else{
+                    var String meshUser = MeshManager.getInstance.createUser(name+"","en");
+                    if(null == meshUser){
+                        result.put(Constants.ERROR_CODE,Constants.ERROR_USER_ADD_ERROR);
+                        result.put(Constants.MESSAGE,i18n.get("user_add_error"));
+                    }else{
+                        var jsonObject = new JSONObject(meshUser);
+                        var String uuid = jsonObject.getString("uuid");
+                        var newUser = context.databaseLoader.ceateNew(AcctUser);
+                        newUser.uniqueid = uuid;
+                        newUser.username = email+"";
+                        newUser.category = Constants.USER;
+                        newUser.type = Constants.USER_FREE;
+                        newUser.password = MD5.GetMD5Code(password+"");
+                        newUser.status = Constants.VERIFING;
+                        newUser.createTime = new Date();
+                        newUser.upload = 0;
+                        var userpro = context.databaseLoader.ceateNew(AcctUserPro);
+                        userpro.firstName = firstName+"";
+                        userpro.birthTime = new Date(Long.parseLong(birthTime+""));
+                        userpro.birthPlace = birthPlace+"";
+                        userpro.name = name+"";
+                        userpro.country = country+"";
+                        userpro.countryCode = countryCode+"";
+                        userpro.address = address+"";
+                        userpro.telephone = telephone+"";
+                        userpro.email = email+"";
+                        if(instagram!=null&&!StringUtils.isBlank(instagram+"")){
+                            userpro.instagram = instagram+"";
+                        }
+                        if(other!=null && !StringUtils.isBlank(other+"")){
+                            userpro.other = other+"";
+                        }
+                        if(homePage!=null && !StringUtils.isBlank(homePage+"")){
+                            userpro.homePage = homePage+"";
+                        }
+                        userpro.school = school+"";
+                        userpro.college = college+"";
+                        userpro.profession = profession+"";
+                        userpro.graduate = graduate+"";
+                        userpro.experience = experience+"";
+                        userpro.designType = designType+"";
+                        userpro.brandName = brandName+"";
+                        userpro.regitrationPlace = regitrationPlace+"";
+                        userpro.agent = agent+"";
+                        userpro.uniqueid = Utils.generateUUID;
+                        userpro.userUniqueid = newUser.uniqueid;
+                        userpro.designStyle = designStyle+"";
+                        var tags = (designStyle+"").split(",");
+                        for(tag:tags){
+                            var newTag = context.databaseLoader.ceateNew(MstTags);
+                            newTag.uniqueid = Utils.generateUUID;
+                            newTag.name = tag;
+                            newTag.userUniqueid = newUser.uniqueid;
+                        }
+                        userpro.works = works+"";
+                        if(resume!=null && StringUtils.isBlank(resume+"")){
+                            userpro.resume = resume+"";
+                        }
+                        context.submit;
+                        result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+                    }
+                }
+            }
+        }else if(Constants.USER_GRADUATE.equals(type)){
+            //应届毕业生
+            if(StringUtils.isBlank(name+"")||name==null
+                    ||StringUtils.isBlank(firstName+"")||firstName ==null
+                    ||StringUtils.isBlank(birthTime+"")||birthTime == null
+                    ||StringUtils.isBlank(birthPlace+"")||birthPlace == null
+                    ||StringUtils.isBlank(country+"")|| country == null
+                    ||StringUtils.isBlank(countryCode+"")||countryCode == null
+                    ||StringUtils.isBlank(address+"")|| address == null
+                    ||StringUtils.isBlank(telephone+"")|| telephone == null
+                    ||StringUtils.isBlank(email+"")|| email == null
+                    ||StringUtils.isBlank(resume+"") || resume == null
+                    ||StringUtils.isBlank(school+"")||school ==null
+                    ||StringUtils.isBlank(college+"")|| college == null
+                    ||StringUtils.isBlank(profession+"")||profession == null
+                    ||StringUtils.isBlank(graduate+"") ||graduate == null
+                    ||StringUtils.isBlank(experience+"")||experience == null
+                    ||StringUtils.isBlank(designStyle+"")||designStyle == null
+                    ||StringUtils.isBlank(designType+"")||designType == null
+                    ||StringUtils.isBlank(password+"")|| password == null){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+                result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+            }else{
+                var String meshUser = MeshManager.getInstance.createUser(name+"","en");
+                if(null == meshUser){
+                    result.put(Constants.ERROR_CODE,Constants.ERROR_USER_ADD_ERROR);
+                    result.put(Constants.MESSAGE,i18n.get("user_add_error"));
+                }else{
+                    var jsonObject = new JSONObject(meshUser);
+                    var String uuid = jsonObject.getString("uuid");
+                    var newUser = context.databaseLoader.ceateNew(AcctUser);
+                    newUser.uniqueid = uuid;
+                    newUser.username = email+"";
+                    newUser.category = Constants.USER;
+                    newUser.type = Constants.USER_GRADUATE;
+                    newUser.password = MD5.GetMD5Code(password+"");
+                    newUser.status = Constants.VERIFING;
+                    newUser.createTime = new Date();
+                    newUser.upload = 0;
+                    var userpro = context.databaseLoader.ceateNew(AcctUserPro);
+                    userpro.firstName = firstName+"";
+                    userpro.birthTime = new Date(Long.parseLong(birthTime+""));
+                    userpro.birthPlace = birthPlace+"";
+                    userpro.name = name+"";
+                    userpro.country = country+"";
+                    userpro.countryCode = countryCode+"";
+                    userpro.address = address+"";
+                    userpro.telephone = telephone+"";
+                    userpro.email = email+"";
+                    if(instagram!=null&&!StringUtils.isBlank(instagram+"")){
+                        userpro.instagram = instagram+"";
+                    }
+                    if(other!=null && !StringUtils.isBlank(other+"")){
+                        userpro.other = other+"";
+                    }
+                    if(homePage!=null && !StringUtils.isBlank(homePage+"")){
+                        userpro.homePage = homePage+"";
+                    }
+                    userpro.school = school+"";
+                    userpro.college = college+"";
+                    userpro.profession = profession+"";
+                    userpro.graduate = graduate+"";
+                    userpro.experience = experience+"";
+                    userpro.designType = designType+"";
+
+                    userpro.uniqueid = Utils.generateUUID;
+                    userpro.userUniqueid = newUser.uniqueid;
+                    userpro.designStyle = designStyle+""
+                    var tags = (designStyle+"").split(",");
+                    for(tag:tags) {
+                        var newTag = context.databaseLoader.ceateNew(MstTags);
+                        newTag.uniqueid = Utils.generateUUID;
+                        newTag.name = tag;
+                        newTag.userUniqueid = newUser.uniqueid;
+                    }
+                    if(works!=null && !StringUtils.isBlank(works+"")){
+                        userpro.works = works+"";
+                    }
+                    userpro.resume = resume+"";
+                    context.submit;
+                    result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+                }
+            }
+        }else if(Constants.USER_PRODUCTION.equals(type)){
+            //自有品牌
+            if(StringUtils.isBlank(name+"")||name==null
+                    ||StringUtils.isBlank(firstName+"")||firstName ==null
+                    ||StringUtils.isBlank(birthTime+"")||birthTime == null
+                    ||StringUtils.isBlank(birthPlace+"")||birthPlace == null
+                    ||StringUtils.isBlank(country+"")|| country == null
+                    ||StringUtils.isBlank(countryCode+"")||countryCode == null
+                    ||StringUtils.isBlank(address+"")|| address == null
+                    ||StringUtils.isBlank(telephone+"")|| telephone == null
+                    ||StringUtils.isBlank(email+"")|| email == null
+                    ||StringUtils.isBlank(resume+"") || resume == null
+                    ||StringUtils.isBlank(school+"")||school ==null
+                    ||StringUtils.isBlank(college+"")|| college == null
+                    ||StringUtils.isBlank(profession+"")||profession == null
+                    ||StringUtils.isBlank(graduate+"") ||graduate == null
+                    ||StringUtils.isBlank(experience+"")||experience == null
+                    ||StringUtils.isBlank(designStyle+"")||designStyle == null
+                    ||StringUtils.isBlank(designType+"")||designType == null
+                    ||StringUtils.isBlank(password+"")||password == null
+                    ||StringUtils.isBlank(brandName+"") || brandName == null
+                    ||StringUtils.isBlank(regitrationPlace+"") || regitrationPlace == null
+                    ||StringUtils.isBlank(regitrationTime+"") || regitrationTime == null
+                    ||StringUtils.isBlank(production+"")|| production == null){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+                result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+            }else{
+                var String meshUser = MeshManager.getInstance.createUser(name+"","en");
+                if(null == meshUser) {
+                    result.put(Constants.ERROR_CODE,Constants.ERROR_USER_ADD_ERROR);
+                    result.put(Constants.MESSAGE,i18n.get("user_add_error"));
+                }else{
+                    var jsonObject = new JSONObject(meshUser);
+                    var String uuid = jsonObject.getString("uuid");
+                    var newUser = context.databaseLoader.ceateNew(AcctUser);
+                    newUser.uniqueid = uuid;
+                    newUser.username = email+"";
+                    newUser.category = Constants.USER;
+                    newUser.type = Constants.USER_PRODUCTION;
+                    newUser.password = MD5.GetMD5Code(password+"");
+                    newUser.status = Constants.VERIFING;
+                    newUser.createTime = new Date();
+                    newUser.upload = 0;
+                    var userpro = context.databaseLoader.ceateNew(AcctUserPro);
+                    userpro.firstName = firstName+"";
+                    userpro.birthTime = new Date(Long.parseLong(birthTime+""));
+                    userpro.birthPlace = birthPlace+"";
+                    userpro.name = name+"";
+                    userpro.country = country+"";
+                    userpro.countryCode = countryCode+"";
+                    userpro.address = address+"";
+                    userpro.telephone = telephone+"";
+                    userpro.email = email+"";
+                    if(instagram!=null&&!StringUtils.isBlank(instagram+"")){
+                        userpro.instagram = instagram+"";
+                    }
+                    if(other!=null && !StringUtils.isBlank(other+"")){
+                        userpro.other = other+"";
+                    }
+                    if(homePage!=null && !StringUtils.isBlank(homePage+"")){
+                        userpro.homePage = homePage+"";
+                    }
+                    userpro.school = school+"";
+                    userpro.college = college+"";
+                    userpro.profession = profession+"";
+                    userpro.graduate = graduate+"";
+                    userpro.experience = experience+"";
+                    userpro.designType = designType+"";
+                    userpro.brandName = brandName+"";
+                    userpro.regitrationPlace = regitrationPlace+"";
+                    userpro.regitrationTime = new Date(Long.parseLong(regitrationTime+""));
+                    userpro.production = Integer.parseInt(production+"");
+                    userpro.uniqueid = Utils.generateUUID;
+                    userpro.userUniqueid = newUser.uniqueid;
+                    userpro.designStyle = designStyle+""
+                    var tags = (designStyle+"").split(",");
+                    for(tag:tags) {
+                        var newTag = context.databaseLoader.ceateNew(MstTags);
+                        newTag.uniqueid = Utils.generateUUID;
+                        newTag.name = tag;
+                        newTag.userUniqueid = newUser.uniqueid;
+                    }
+                    if(works!=null && !StringUtils.isBlank(works+"")){
+                        userpro.works = works+"";
+                    }
+                    userpro.resume = resume+"";
+                    context.submit;
+                    result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+                }
+            }
+        }else{
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }
+
+        return result;
+    }
+}

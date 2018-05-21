@@ -1,0 +1,49 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.mesh.MeshManager
+import com.aolc.designer.AcctUser
+import java.util.Date
+import com.aolc.designer.AcctUserPro
+
+PAGE WebUploadUserInfo(title="上传用户信息",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var uniqueid = request.get("uniqueid");
+        var name = request.get("name");
+        var userIntroduction = request.get("user_introduction");
+        var brandIntroduction = request.get("brand_introduction");
+        var userBackground = request.get("user_background");
+        if(uniqueid==null
+                ||name == null
+                ||userIntroduction == null
+                ||brandIntroduction == null
+                ||userBackground == null
+                ||StringUtils.isBlank(uniqueid+"")
+                ||StringUtils.isBlank(name+"")
+                ||StringUtils.isBlank(userIntroduction+"")
+                ||StringUtils.isBlank(brandIntroduction+"")
+                ||StringUtils.isBlank(userBackground+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var background = context.getResourceUrl(userBackground+"");
+            if(!MeshManager.getInstance.uploadUserInfo(uniqueid+"",name+"",userIntroduction+"",brandIntroduction+"",Constants.LANGUAGE,background)){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_USER_PUBLISHED_ERROR);
+                result.put(Constants.MESSAGE,i18n.get("user_published_error"));
+            }else{
+                var user = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid ='"+uniqueid+"'");
+                user.upload = 1;
+                user.verifyTime = new Date();
+                var userPro = context.databaseLoader.getEntityByCondition(AcctUserPro,"userUniqueid = '"+uniqueid+"'");
+                userPro.userBackground = userBackground+"";
+                context.submit;
+                result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+            }
+        }
+        return result;
+    }
+}

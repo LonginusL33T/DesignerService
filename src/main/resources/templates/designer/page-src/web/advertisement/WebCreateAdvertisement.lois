@@ -1,0 +1,30 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.MstAdvertisement
+import java.util.Date
+
+PAGE WebCreateAdvertisement(title="创建广告",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var source = request.get("source");
+        var name = request.get("name");
+        if(source == null || StringUtils.isBlank(source+"")
+                ||name == null
+                ||StringUtils.isBlank(name+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var advertisement = context.databaseLoader.ceateNew(MstAdvertisement);
+            advertisement.time = new Date();
+            advertisement.name = name+"";
+            advertisement.source = source+"";
+            context.submit;
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        }
+        return result;
+    }
+}

@@ -1,0 +1,30 @@
+package client.service.web
+
+import cn.smartx.core.model.akka.JellyInjectAkka
+import java.util.HashMap
+import cn.smartx.core.model.entity.AcctUserRole
+import cn.smartx.core.model.entity.AcctRolePermission
+import cn.smartx.core.AAA.SmartxSecurityManager
+import cn.smartx.core.model.JellyInjectBase
+import com.aolc.designer.utils.Constants
+
+PAGE WebDeleteRole(title="删除角色", checktoken="true") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var roleSid = request.get("roleSid");
+        var loader = context.databaseLoader;
+        var roleService = SmartxSecurityManager.getInstance.getRoleService(context.appCode);
+        var userRoles = loader.getByCondition(AcctUserRole,"toAcctRole.sid="+roleSid);
+        var rolePermissions = loader.getByCondition(AcctRolePermission,"toAcctRole.sid="+roleSid);
+        for(userRole : userRoles){
+            loader.delete(userRole);
+        }
+        for(rolePermission:rolePermissions){
+            loader.delete(rolePermission);
+        }
+        context.submit;
+        roleService.deleteRole(Integer.parseInt(roleSid+""));
+        result.put(Constants.ERROR_CODE,Constants.SUCCESS)
+        return result;
+    }
+}

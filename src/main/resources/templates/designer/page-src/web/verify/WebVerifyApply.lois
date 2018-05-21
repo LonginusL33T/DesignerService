@@ -1,0 +1,144 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.AcctUser
+import java.util.ArrayList
+import org.apache.cayenne.query.Ordering
+import org.apache.cayenne.query.SortOrder
+import org.apache.cayenne.ObjectContext
+import cn.smartx.core.ds.database.DBService
+import org.apache.cayenne.query.EJBQLQuery
+import java.util.List
+import java.util.Map
+import com.aolc.designer.AcctUserPro
+import com.aolc.designer.MstApplyMapping
+import java.util.Date
+import com.aolc.designer.AcctUserCompany
+import com.aolc.designer.MstRecruit
+import com.aolc.designer.MstCompanyApplyMapping
+
+PAGE WebVerifyApply(title="应聘信息审核列表",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var category = request.get("category");
+        var uniqueid = request.get("uniqueid");
+        var pagesize = request.get("pagesize");
+        var pagenum = request.get("pagenum");
+
+        if(pagesize==null||StringUtils.isBlank(pagesize+"")){
+            pagesize = 10;
+        }else{
+            pagesize = Integer.parseInt(pagesize+"");
+        }
+        if(pagenum == null || StringUtils.isBlank(pagenum+" ")){
+            pagenum = 0;
+        }else{
+            pagenum = Integer.parseInt(pagenum+"");
+        }
+        if(uniqueid ==null || StringUtils.isBlank(uniqueid+"")
+                ||category ==null || StringUtils.isBlank(category+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var userResult = new ArrayList();
+            var count = 0L;
+            if(category == Constants.COMPANY){
+                var String sql = "select u.userUniqueid,u.createTime,u.isSendByCompany,u.jobUniqueid,u.uniqueid,u.status from MstApplyMapping u  where u.jobUniqueid in (select r.uniqueid from MstRecruit r where r.userUniqueid = '"+uniqueid+"' ) and u.status <> '"+Constants.REJECT+"' order by u.createTime DESC ";
+                var ejbsql = "select count(u.uniqueid) from MstApplyMapping u  where u.jobUniqueid in (select r.uniqueid from MstRecruit r where r.userUniqueid = '"+uniqueid+"' ) and u.status <> '"+Constants.REJECT+"'";
+                var limit = (pagenum as Integer)*(pagesize as Integer);
+                count = context.databaseLoader.getQueryTotalCount(ejbsql);
+
+                var EJBQLQuery ejbqlQuery = new EJBQLQuery(sql+"");
+                ejbqlQuery.setFetchLimit(pagesize as Integer);
+                ejbqlQuery.setFetchOffset(limit as Integer);
+                var ObjectContext objectContext = DBService.createDatabaseContext();
+                var List response = objectContext.performQuery(ejbqlQuery);
+                var companyInfo = context.databaseLoader.getEntityByCondition(AcctUserCompany,"userUniqueid ='"+uniqueid+"'");
+                for(var i=0;i<response.size;i++) {
+                    var company = response.get(i) as Object[];
+                    var retList = company as List;
+                    var companyMap = new HashMap();
+                    var userUniqueid = company.get(0);
+                    var recuritUniqueid = company.get(3);
+                    var isSendByCompany = company.get(2);
+                    var user = context.databaseLoader.getEntityByCondition(AcctUserPro,"userUniqueid = '"+userUniqueid+"'");
+                    var job = context.databaseLoader.getEntityByCondition(MstRecruit,"uniqueid = '"+recuritUniqueid+"'");
+                    companyMap.put("uniqueid",company.get(4));
+                    companyMap.put("time",utils.toDateString(company.get(1) as Date));
+                    if(isSendByCompany!=null){
+                        companyMap.put("is_send_by_company",isSendByCompany);
+                    }else{
+                        companyMap.put("is_send_by_company",0);
+                    }
+                    companyMap.put("recruit_uniqueid",company.get(3));
+                    companyMap.put("user_name",user.getName);
+                    companyMap.put("category",job.category);
+                    companyMap.put("design_type",user.designType);
+                    companyMap.put("designer_telephone",user.telephone);
+                    companyMap.put("company_telephone",companyInfo.telephone);
+                    companyMap.put("status",company.get(5));
+                    userResult.add(companyMap);
+                }
+            }else if(Constants.APPLY == category){
+                var orders = new ArrayList();
+                var order = new Ordering("createTime",SortOrder.DESCENDING);
+                orders.add(order);
+                var applys = context.databaseLoader.getByConditionPagination(MstCompanyApplyMapping,"userUniqueid = '"+uniqueid+"' and status <> '"+Constants.REJECT+"'",null,orders,pagesize as Integer,pagenum as Integer);
+                var ejbsql = "select count(u.uniqueid) from MstCompanyApplyMapping u where u.userUniqueid ='"+uniqueid+"' and u.status <> '"+Constants.REJECT+"'";
+                count = context.databaseLoader.getQueryTotalCount(ejbsql);
+                var user = context.databaseLoader.getEntityByCondition(AcctUserCompany,"userUniqueid = '"+uniqueid+"'");
+                for(apply : applys){
+                    var userInfo = context.databaseLoader.getEntityByCondition(AcctUserPro,"userUniqueid ='"+apply.emUniqueid+"'");
+                    var Map applyMap = new HashMap();
+                    applyMap.put("uniqueid",apply.uniqueid);
+                    applyMap.put("time",utils.toDateString(apply.createTime));
+                    applyMap.put("is_send_by_company",1);
+                    applyMap.put("company_telephone",user.telephone);
+                    applyMap.put("user_name",userInfo.name);
+                    applyMap.put("designer_telephone",userInfo.telephone);
+                    applyMap.put("design_type",userInfo.designType);
+                    applyMap.put("status",apply.status);
+                    userResult.add(applyMap);
+                }
+
+            }else{
+                var orders = new ArrayList();
+                var order = new Ordering("createTime",SortOrder.DESCENDING);
+                orders.add(order);
+
+                var userApplys = context.databaseLoader.getByConditionPagination(MstApplyMapping,"userUniqueid = '"+uniqueid+"' and status <> '"+Constants.REJECT+"'",null,orders,pagesize as Integer,pagenum as Integer);
+                var ejbsql = "select count(u.uniqueid) from MstApplyMapping u where u.userUniqueid ='"+uniqueid+"' and u.status <> '"+Constants.REJECT+"'";
+                count = context.databaseLoader.getQueryTotalCount(ejbsql);
+                var userInfo = context.databaseLoader.getEntityByCondition(AcctUserPro,"userUniqueid ='"+uniqueid+"'");
+                for(apply:userApplys){
+                    var Map recruitMap = new HashMap();
+                    recruitMap.put("uniqueid",apply.uniqueid);
+                    recruitMap.put("time",utils.toDateString(apply.createTime));
+                    if(apply.isSendByCompany!=null){
+                        recruitMap.put("is_send_by_company",apply.isSendByCompany);
+                    }else{
+                        recruitMap.put("is_send_by_company",0);
+                    }
+                    recruitMap.put("recruit_uniqueid",apply.jobUniqueid);
+                    var job = context.databaseLoader.getEntityByCondition(MstRecruit,"uniqueid = '"+apply.jobUniqueid+"'");
+                    var user = context.databaseLoader.getEntityByCondition(AcctUserCompany,"userUniqueid = '"+job.userUniqueid+"'");
+                    recruitMap.put("company_telephone",user.telephone);
+                    recruitMap.put("designer_telephone",userInfo.telephone);
+                    recruitMap.put("user_name",user.name);
+                    recruitMap.put("category",job.category);
+                    recruitMap.put("design_type",userInfo.designType);
+                    recruitMap.put("status",apply.status);
+                    userResult.add(recruitMap);
+                }
+            }
+
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+            result.put(Constants.APPLYS,userResult);
+            result.put(Constants.TOTAL_NUM,count);
+        }
+        return result;
+    }
+}

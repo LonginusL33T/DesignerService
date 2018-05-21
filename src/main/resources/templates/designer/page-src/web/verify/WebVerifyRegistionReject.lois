@@ -1,0 +1,32 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.AcctUser
+import com.aolc.designer.utils.EmailServer
+import cn.smartx.core.service.validate.ValidateManager
+
+PAGE WebVerifyRegistionReject(title="审核不通过",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var uniqueid = request.get("uniqueid");
+        if(uniqueid==null||StringUtils.isBlank(uniqueid+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var user = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid ='"+uniqueid+"'");
+            var  emailServer = new EmailServer();
+            if(ValidateManager.getInstance.sendByEmail(emailServer,user.username as String,"通知信息","设计师工作站提醒您，您的注册申请未审核通过，请重新核实信息并上传。如有任何疑问，请发送邮件至wedesign@shang-highstreet.cn, 谢谢！")){
+                user.status = Constants.REJECT;
+                context.submit
+                result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+            }else{
+                result.put(Constants.ERROR_CODE,Constants.ERROR_EMAIL_SEND_FAILED);
+                result.put(Constants.MESSAGE,i18n.get("email_send_failed"));
+            }
+        }
+        return result;
+    }
+}

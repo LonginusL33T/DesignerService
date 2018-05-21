@@ -1,0 +1,47 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.mesh.MeshManager
+import java.util.ArrayList
+import cn.smartx.core.AAA.service.MenuService
+import cn.smartx.core.AAA.SmartxSecurityManager
+import cn.smartx.core.model.entity.AcctMenu
+import cn.smartx.core.AAA.model.User
+
+PAGE WebGetMenus(title="获取用户权限",path="branch",checktoken="false") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        if(session == null){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_SESSION_TIMEOUT);
+            result.put(Constants.MESSAGE,i18n.get("session_timeout"));
+        }else{
+            MeshManager.getInstance;
+            var permessions = session.getPermissions;
+            var menus = new ArrayList();
+            for(permession:permessions){
+                var menuCode=(permession.split(":").get(0));
+                var menu = context.databaseLoader.getEntityByCondition(AcctMenu,"code ='"+menuCode+"' and appcode ='"+context.appCode+"'")
+                var menuMap = new HashMap();
+                menuMap.put("url",menu.url);
+                menuMap.put("name",menu.title);
+                menuMap.put("code",menu.code);
+                menuMap.put("sid",menu.sid);
+                menus.add(menuMap);
+            }
+            var user = new HashMap();
+            var User sessionUser = session.getUser ;
+            user.put("name",sessionUser.name);
+            user.put("loginname",sessionUser.loginname);
+            user.put("roles",session.getRolesNameSet);
+
+            result.put("permissions",session.getPermissions);
+            result.put("menus",menus);
+            result.put("user",user);
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+            result.put(Constants.MESH_TOKEN,MeshManager.mesh_token);
+        }
+        return result;
+    }
+}

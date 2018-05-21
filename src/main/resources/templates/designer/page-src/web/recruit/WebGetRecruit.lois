@@ -1,0 +1,66 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.AcctUser
+import com.aolc.designer.MstFeedback
+import java.util.ArrayList
+import org.apache.cayenne.query.Ordering
+import org.apache.cayenne.query.SortOrder
+import com.aolc.designer.MstRecruit
+
+PAGE WebGetRecruit(title="获取招聘列表",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var pagesize = request.get("pagesize");
+        var pagenum = request.get("pagenum");
+        var companyId = request.get("uniqueid");
+        if(pagesize == null || StringUtils.isBlank(pagesize+"")){
+            pagesize = 10;
+        }else{
+            pagesize = Integer.parseInt(pagesize+"");
+        }
+        if(pagenum == null || StringUtils.isBlank(pagenum+"")){
+            pagenum = 0;
+        }else{
+            pagenum = Integer.parseInt(pagenum+"");
+        }
+        if(companyId == null
+                ||StringUtils.isBlank(companyId+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var sql = "userUniqueid = '"+companyId+"'";
+            var String ejbsql = "select count(uniqueid) from MstRecruit u where u.userUniqueid = '"+companyId+"'";
+
+            var recruitList = new ArrayList();
+            var orders = new ArrayList();
+            var order = new Ordering("createTime",SortOrder.DESCENDING);
+            orders.add(order);
+            var recruits = context.databaseLoader.getByConditionPagination(MstRecruit,sql,null,orders,pagesize as Integer,pagenum as Integer);
+            var count = context.databaseLoader.getQueryTotalCount(ejbsql);
+            for(recruit :recruits){
+                var recruitMap = new HashMap();
+                recruitMap.put("title",recruit.title);
+                recruitMap.put("time",utils.toDateStringB(recruit.createTime));
+                recruitMap.put("category",recruit.category);
+                recruitMap.put("uniqueid",recruit.uniqueid);
+                recruitMap.put("skills_requirements",recruit.skillsRequirements);
+                recruitMap.put("educational_requirements",recruit.educationalRequirements);
+                recruitMap.put("compensation_benefit",recruit.compensationBenefit);
+                recruitMap.put("experience",recruit.experience);
+                recruitMap.put("job_detail",recruit.jobDetail);
+                recruitMap.put("address",recruit.address);
+                recruitMap.put("tags",recruit.tags);
+                recruitList.add(recruitMap);
+            }
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+            result.put(Constants.TOTAL_NUM,count);
+            result.put("recruits",recruitList);
+        }
+
+        return result;
+    }
+}

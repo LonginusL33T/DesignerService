@@ -1,0 +1,27 @@
+package client.service.web
+
+import cn.smartx.core.AAA.SmartxSecurityManager
+import java.util.List
+import java.util.ArrayList
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import cn.smartx.core.model.JellyInjectBase
+
+PAGE WebUpdateUserRoles(title="更新用户角色", checktoken="true") extends JellyInjectBase{
+    EVENT SERVICE{
+        var roles = request.get("roles") as List;
+        var loginname = request.get("loginname") as String;
+        var userService = SmartxSecurityManager.getInstance.getUserService(context.appCode);
+        var roleService = SmartxSecurityManager.getInstance.getRoleService(context.appCode);
+        var user = userService.findByUsername(loginname);
+        var roleList = new ArrayList();
+        for(role:roles){
+            roleList.add(roleService.findRoleBySid(Integer.parseInt(role+"")));
+        }
+        userService.removeRoles(user,userService.findRoles(loginname));
+        userService.addRoles(user,roleList);
+        var result = new HashMap();
+        result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        return result
+    }
+}

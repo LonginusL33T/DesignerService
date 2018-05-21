@@ -1,0 +1,57 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import java.util.List
+import com.aolc.designer.AcctUserCompany
+import com.aolc.designer.AcctUser
+import com.aolc.designer.AcctUserPro
+import com.aolc.designer.MstApplyMapping
+import com.aolc.designer.MstFeedback
+import com.aolc.designer.MstCompanyApplyMapping
+
+PAGE WebDeleteDesigner(title="删除设计师",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var uniqueid = request.get("uniqueid");
+        if(uniqueid ==null || StringUtils.isBlank(uniqueid+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            if(uniqueid instanceof List){
+                for(id : uniqueid){
+                    var user = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid ='"+id+"'");
+                    var userPro = context.databaseLoader.getEntityByCondition(AcctUserPro,"userUniqueid ='"+id+"'");
+                    var applys = context.databaseLoader.getByCondition(MstApplyMapping,"userUniqueid = '"+id+"'");
+                    var feedbacks = context.databaseLoader.getByCondition(MstFeedback,"userUniqueid='"+id+"'");
+                    var companyApplys = context.databaseLoader.getByCondition(MstCompanyApplyMapping,"emUniqueid='"+id+"'");
+
+                    context.databaseLoader.delete(user);
+                    context.databaseLoader.delete(userPro);
+                    context.databaseLoader.deleteAll(applys);
+                    context.databaseLoader.deleteAll(feedbacks);
+                    context.databaseLoader.deleteAll(companyApplys);
+
+                    context.submit();
+                }
+            }else{
+                var user = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid ='"+uniqueid+"'");
+                var userPro = context.databaseLoader.getEntityByCondition(AcctUserPro,"userUniqueid ='"+uniqueid+"'");
+                var applys = context.databaseLoader.getByCondition(MstApplyMapping,"userUniqueid = '"+uniqueid+"'");
+                var feedbacks = context.databaseLoader.getByCondition(MstFeedback,"userUniqueid='"+uniqueid+"'");
+                var companyApplys = context.databaseLoader.getByCondition(MstCompanyApplyMapping,"emUniqueid='"+uniqueid+"'");
+
+                context.databaseLoader.deleteAll(applys);
+                context.databaseLoader.deleteAll(feedbacks);
+                context.databaseLoader.delete(user);
+                context.databaseLoader.delete(userPro);
+                context.databaseLoader.deleteAll(companyApplys);
+                context.submit();
+            }
+            result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        }
+        return result;
+    }
+}

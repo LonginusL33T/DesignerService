@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="CellGetRecruitByCompany" title="获取招聘列表" path="branch"  jellyinject="client.service.mobile.CellGetRecruitByCompany"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

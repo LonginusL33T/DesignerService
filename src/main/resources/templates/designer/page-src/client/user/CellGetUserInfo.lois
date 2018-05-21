@@ -1,0 +1,161 @@
+package client.service.mobile
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.AcctUser
+import java.util.ArrayList
+import com.aolc.designer.AcctUserCompany
+import com.aolc.designer.AcctUserPro
+
+PAGE CellGetUserInfo(title="获取用户信息",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var uniqueid = session.getAttribute("uniqueid");
+        if(uniqueid==null||StringUtils.isBlank(uniqueid+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var user = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid ='"+uniqueid+"'");
+            if(user == null){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_USER_NOT_EXIST);
+                result.put(Constants.MESSAGE,i18n.get("user_not_exist"));
+                return result;
+            }
+            var userMap = new HashMap();
+            userMap.put("avatar",context.getResourceUrl(user.avatar));
+            userMap.put("category",user.category);
+            userMap.put("status",user.status);
+            userMap.put("type",user.type);
+            if(Constants.COMPANY == user.category){
+                //企业用户
+                var company = context.databaseLoader.getEntityByCondition(AcctUserCompany,"userUniqueid ='"+user.uniqueid+"'");
+                userMap.put("name",company.name);
+                userMap.put("registion_place",company.registionPlace);
+                userMap.put("brand_name",company.brandName);
+                userMap.put("brand_num",company.brandNum);
+                userMap.put("address",company.address);
+                userMap.put("telephone",company.telephone);
+                userMap.put("contact_telephone",company.connectTelephone);
+                userMap.put("email",company.email);
+                userMap.put("size",company.size);
+                userMap.put("enterprise_nature",company.enterpriseNature);
+                var licences = company.businessLicence.split(",");
+                var licencesList = new ArrayList();
+                for(licence:licences){
+                    licencesList.add(context.getResourceUrl(licence));
+                }
+                userMap.put("business_licence",licencesList);
+                userMap.put("business_contact_card",context.getResourceUrl(company.businessContactCard));
+            }else if(Constants.USER == user.category && Constants.USER_FREE == user.type){
+                //自由用户
+                var userInfo = context.databaseLoader.getEntityByCondition(AcctUserPro,"userUniqueid = '"+user.uniqueid+"'");
+                userMap.put("name",userInfo.name);
+                userMap.put("birth_time",userInfo.birthTime);
+                userMap.put("birth_place",userInfo.birthPlace);
+                userMap.put("country",userInfo.country);
+                userMap.put("address",userInfo.address);
+                userMap.put("telephone",userInfo.telephone);
+                userMap.put("email",userInfo.email);
+                userMap.put("instagram",userInfo.instagram);
+                userMap.put("other",userInfo.other);
+                userMap.put("home_page",userInfo.homePage);
+                userMap.put("school",userInfo.school);
+                userMap.put("college",userInfo.college);
+                userMap.put("profession",userInfo.profession);
+                userMap.put("graduate",userInfo.graduate);
+                userMap.put("experience",userInfo.experience);
+                userMap.put("design_type",userInfo.designType);
+                userMap.put("brand_name",userInfo.brandName);
+                userMap.put("agent",userInfo.agent);
+                userMap.put("regitration_place",userInfo.regitrationPlace);
+                userMap.put("production",userInfo.production);
+                userMap.put("tags",userInfo.designStyle.replace(",","、"));
+                var works = new ArrayList();
+                var worksStr = userInfo.works.split(",");
+                for(work : worksStr){
+                    works.add(context.getResourceUrl(work));
+                }
+                userMap.put("works",works);
+                var resumes = new ArrayList();
+                var resumesStr = userInfo.resume.split(",");
+                for(resume : resumesStr){
+                    resumes.add(context.getResourceUrl(resume));
+                }
+                userMap.put("resumes",resumes);
+            }else if(Constants.USER == user.category && Constants.USER_PRODUCTION == user.type){
+                //自有品牌用户
+                var userInfo = context.databaseLoader.getEntityByCondition(AcctUserPro,"userUniqueid = '"+user.uniqueid+"'");
+                userMap.put("name",userInfo.name);
+                userMap.put("birth_time",userInfo.birthTime);
+                userMap.put("birth_place",userInfo.birthPlace);
+                userMap.put("country",userInfo.country);
+                userMap.put("address",userInfo.address);
+                userMap.put("telephone",userInfo.telephone);
+                userMap.put("email",userInfo.email);
+                userMap.put("instagram",userInfo.instagram);
+                userMap.put("other",userInfo.other);
+                userMap.put("home_page",userInfo.homePage);
+                userMap.put("school",userInfo.school);
+                userMap.put("college",userInfo.college);
+                userMap.put("profession",userInfo.profession);
+                userMap.put("graduate",userInfo.graduate);
+                userMap.put("experience",userInfo.experience);
+                userMap.put("design_type",userInfo.designType);
+                userMap.put("brand_name",userInfo.brandName);
+                userMap.put("regitration_time",userInfo.regitrationTime);
+                userMap.put("regitration_place",userInfo.regitrationPlace);
+                userMap.put("production",userInfo.production);
+                userMap.put("tags",userInfo.designStyle.replace(",","、"));
+                var works = new ArrayList();
+                var worksStr = userInfo.works.split(",");
+                for(work : worksStr){
+                    works.add(context.getResourceUrl(work));
+                }
+                userMap.put("works",works);
+                var resumes = new ArrayList();
+                var resumesStr = userInfo.resume.split(",");
+                for(resume : resumesStr){
+                    resumes.add(context.getResourceUrl(resume));
+                }
+                userMap.put("resumes",resumes);
+            }else if(Constants.USER == user.category && Constants.USER_GRADUATE == user.type){
+                //应届毕业生
+                var userInfo = context.databaseLoader.getEntityByCondition(AcctUserPro,"userUniqueid = '"+user.uniqueid+"'");
+                userMap.put("name",userInfo.name);
+                userMap.put("birth_time",userInfo.birthTime);
+                userMap.put("birth_place",userInfo.birthPlace);
+                userMap.put("country",userInfo.country);
+                userMap.put("address",userInfo.address);
+                userMap.put("telephone",userInfo.telephone);
+                userMap.put("email",userInfo.email);
+                userMap.put("instagram",userInfo.instagram);
+                userMap.put("other",userInfo.other);
+                userMap.put("home_page",userInfo.homePage);
+                userMap.put("school",userInfo.school);
+                userMap.put("college",userInfo.college);
+                userMap.put("profession",userInfo.profession);
+                userMap.put("graduate",userInfo.graduate);
+                userMap.put("experience",userInfo.experience);
+                userMap.put("design_type",userInfo.designType);
+                userMap.put("tags",userInfo.designStyle.replace(",","、"));
+                var works = new ArrayList();
+                var worksStr = userInfo.works.split(",");
+                for(work : worksStr){
+                    works.add(context.getResourceUrl(work));
+                }
+                userMap.put("works",works);
+                var resumes = new ArrayList();
+                var resumesStr = userInfo.resume.split(",");
+                for(resume : resumesStr){
+                    resumes.add(context.getResourceUrl(resume));
+                }
+                userMap.put("resumes",resumes);
+            }
+            result.put(Constants.USER,userMap);
+        }
+        result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        return result;
+    }
+}

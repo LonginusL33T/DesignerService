@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="CellGetApplyByDesigner" title="应聘" path="branch"  jellyinject="client.service.mobile.CellGetApplyByDesigner"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

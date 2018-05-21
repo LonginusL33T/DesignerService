@@ -1,0 +1,21 @@
+package client.service.web
+
+import cn.smartx.core.model.akka.JellyInjectAkka
+import cn.smartx.core.AAA.SmartxSecurityManager
+import java.util.HashMap
+import cn.smartx.core.model.JellyInjectBase
+import com.aolc.designer.utils.Constants
+
+PAGE WebGetUserRoles(title="获取用户角色", checktoken="true") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var loginname = request.get("loginname") as String;
+        var userService = SmartxSecurityManager.getInstance.getUserService(context.appCode);
+        var roles = userService.findRoles(loginname);
+        var rolesAll = SmartxSecurityManager.getInstance.getRoleService(context.appCode).listAll;
+        result.put("userRoles",roles);
+        result.put("roles",rolesAll);
+        result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        return result;
+    }
+}

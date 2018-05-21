@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="WebVerifyApplyAccept" title="应聘信息审核通过" path="branch"  jellyinject="client.service.web.WebVerifyApplyAccept"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

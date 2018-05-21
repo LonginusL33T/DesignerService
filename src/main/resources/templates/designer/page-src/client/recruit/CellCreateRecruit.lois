@@ -1,0 +1,83 @@
+package client.service.mobile
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.MstRecruit
+import java.util.Date
+import com.aolc.designer.mesh.MeshManager
+import org.json.JSONObject;
+import com.aolc.designer.AcctUser
+
+PAGE CellCreateRecruit(title="创建应聘信息",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var category = request.get("category");
+        var address = request.get("address");
+        var educationalRequirements = request.get("educational_requirements");
+        var experience = request.get("experience");
+        var jobDetail = request.get("job_detail");
+        var skillsRequirements = request.get("skills_requirements");
+        var compensationBenefit = request.get("compensation_benefit");
+        var tags = request.get("tags");
+        if(category == null||StringUtils.isBlank(category+"")
+                ||address == null || StringUtils.isBlank(address+"")
+                ||educationalRequirements == null || StringUtils.isBlank(educationalRequirements+"")
+                ||experience == null || StringUtils.isBlank(experience+"")
+                ||jobDetail == null || StringUtils.isBlank(jobDetail+"")
+                ||skillsRequirements == null || StringUtils.isBlank(skillsRequirements+"")
+                ||compensationBenefit == null || StringUtils.isBlank(compensationBenefit+"")
+                ||tags == null || StringUtils.isBlank(tags+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var userUniqueid = session.getAttribute("uniqueid");
+            var userInfo = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid ='"+userUniqueid+"'");
+            if(Constants.VERIFING == userInfo.status){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_ADD_RECURIT_USER_VARIFYING);
+                result.put(Constants.MESSAGE,i18n.get("add_recurit_user_varifying"));
+            }else if(Constants.REJECT == userInfo.status){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_ADD_RECURIT_USER_REJECT);
+                result.put(Constants.MESSAGE,i18n.get("add_recurit_user_reject"));
+            }else if(Constants.LOCKED == userInfo.status){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_ADD_RECURIT_USER_LOCKED);
+                result.put(Constants.MESSAGE,i18n.get("add_recurit_user_locked"));
+            }else if(Constants.ACCEPT == userInfo.status){
+                var createResult = MeshManager.getInstance.createRecurit(category+"",
+                address+"",
+                educationalRequirements+"",
+                experience+"",
+                jobDetail+"",
+                skillsRequirements+"",
+                compensationBenefit+"",
+                tags+"",
+                "en");
+
+                var jsonObject = new JSONObject(createResult);
+                var uniqueid = jsonObject.getString("uuid");
+                if(MeshManager.getInstance.publishNode(uniqueid)){
+                    var recruit = context.databaseLoader.ceateNew(MstRecruit);
+                    recruit.category = category+"";
+                    recruit.address = address+"";
+                    recruit.educationalRequirements = educationalRequirements+"";
+                    recruit.experience = experience+"";
+                    recruit.jobDetail = jobDetail+"";
+                    recruit.skillsRequirements = skillsRequirements+"";
+                    recruit.compensationBenefit = compensationBenefit+"";
+                    recruit.createTime = new Date();
+                    recruit.userUniqueid = userUniqueid+"";
+                    recruit.uniqueid = uniqueid;
+                    recruit.tags = tags+"";
+                    context.databaseLoader.commit;
+                    result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+                }else{
+                    result.put(Constants.ERROR_CODE,Constants.ERROR_ADD_RECURIT_ERROR);
+                    result.put(Constants.MESSAGE,i18n.get("add_recurit_error"));
+                }
+            }
+
+        }
+        return result;
+    }
+}

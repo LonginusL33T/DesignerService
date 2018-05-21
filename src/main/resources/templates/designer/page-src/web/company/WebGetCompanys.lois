@@ -1,0 +1,80 @@
+package client.service.web
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.AcctUserCompany
+import java.util.ArrayList
+import org.apache.cayenne.query.Ordering
+import org.apache.cayenne.query.SortOrder
+import java.util.List
+import org.apache.cayenne.query.EJBQLQuery
+import org.apache.cayenne.ObjectContext
+import cn.smartx.core.ds.database.DBService
+
+PAGE WebGetCompanys(title="获取企业列表",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var pagesize = request.get("pagesize");
+        var pagenum = request.get("pagenum");
+        var size = request.get("size");
+        var nature = request.get("nature");
+        var query = request.get("query");
+        var String sql = "select u from DAcctUserCompany u where u.userUniqueid in ( select a.uniqueid from DAcctUser a where a.status ='"+Constants.ACCEPT+"')";
+        var String ejbsql = "select count(uniqueid) from DAcctUserCompany c where c.userUniqueid in ( select a.uniqueid from DAcctUser a where a.status ='"+Constants.ACCEPT+"')"
+        if(pagesize == null || StringUtils.isBlank(pagesize+"")){
+            pagesize = 10;
+        }else{
+            pagesize = Integer.parseInt(pagesize+"");
+        }
+        if(pagenum == null || StringUtils.isBlank(pagenum+"")){
+            pagenum = 0;
+        }else{
+            pagenum = Integer.parseInt(pagenum+"");
+        }
+        if(size !=null && !StringUtils.isBlank(size+"")){
+            sql +=" and u.size ='"+size+"'";
+            ejbsql+=" and c.size ='"+size+"'";
+        }
+        if(nature != null && !StringUtils.isBlank(nature+"")){
+            sql +=" and u.enterpriseNature ='"+nature+"'";
+            ejbsql+=" and c.enterpriseNature ='"+nature+"'";
+        }
+        if(query != null ){
+            sql +=" and (u.name like '%"+query+"%' or u.brandName like '%"+query+"%')";
+            ejbsql +=" and (c.name like '%"+query+"%' or c.brandName like '%"+query+"%')";
+        }
+
+//        var orderings = new ArrayList();
+//        orderings.add(new Ordering("name",SortOrder.ASCENDING));
+
+        //var List<AcctUserCompany> companys = context.databaseLoader.getByConditionPagination(AcctUserCompany,sql,null,orderings,pagesize as Integer,pagenum as Integer);
+
+        var limit = (pagenum as Integer)*(pagesize as Integer);
+        var EJBQLQuery ejbqlQuery = new EJBQLQuery(sql);
+        ejbqlQuery.setFetchLimit(pagesize as Integer);
+        ejbqlQuery.setFetchOffset(limit as Integer);
+        var ObjectContext objectContext = DBService.createDatabaseContext();
+        var List<AcctUserCompany> companys = objectContext.performQuery(ejbqlQuery);
+        var count = context.databaseLoader.getQueryTotalCount(ejbsql);
+        var companysList = new ArrayList();
+        for(company:companys){
+            var map = new HashMap();
+            map.put("uniqueid",company.userUniqueid);
+            map.put("name",company.name);
+            map.put("brand_num",company.brandNum);
+            map.put("brand_name",company.brandName);
+            map.put("address",company.address);
+            map.put("telephone",company.telephone);
+            map.put("size",company.size);
+            map.put("enterprise_nature",company.enterpriseNature);
+            map.put("business_contact_card",context.getResourceUrl(company.businessContactCard));
+            companysList.add(map);
+        }
+        result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        result.put(Constants.COMPANY,companysList);
+        result.put(Constants.TOTAL_NUM,count);
+        return result;
+    }
+}

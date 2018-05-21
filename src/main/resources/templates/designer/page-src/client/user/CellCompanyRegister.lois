@@ -1,0 +1,99 @@
+package client.service.mobile
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.AcctUser
+import com.aolc.designer.AcctUserCompany
+import com.aolc.designer.utils.Utils
+import com.aolc.designer.utils.MD5
+import com.aolc.designer.mesh.MeshManager
+import org.json.JSONObject;
+
+import java.util.Date
+
+PAGE CellCompanyRegister(title="企业用户注册",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var name = request.get("name");//企业名
+        var registionPlace = request.get("registion_place");//注册地址
+        var brandNum = request.get("brand_num");//品牌数量
+        var brandName = request.get("brand_name");//品牌名称
+        var address = request.get("address");//联系地址
+        var telephone = request.get("telephone");//固定电话
+        var contactPhone = request.get("contact_phone");//联系人电话
+        var email = request.get("email");//邮箱地址
+        var size = request.get("size");//企业范围
+        var enterpriseNature = request.get("enterprise_nature");//企业性质
+        var businessLicence = request.get("business_licence");//营业执照
+        var organizationCodeCertificate = request.get("organization_code_certificate");//组织代码证
+        var businessContactCard = request.get("business_contact_card");//联系人名片
+        var taxRegistrationCertificate = request.get("tax_registration_certificate");//税务登记证
+        var password = request.get("password");//登录密码
+
+        if(StringUtils.isBlank(email+"") || email == null
+                        ||StringUtils.isBlank(name+"") || name == null
+                        ||StringUtils.isBlank(registionPlace+"") || registionPlace == null
+                        ||StringUtils.isBlank(brandNum+"")|| brandNum == null
+                        ||StringUtils.isBlank(brandName+"") || brandName == null
+                        ||StringUtils.isBlank(address+"") || address == null
+                        ||StringUtils.isBlank(telephone+"") || telephone == null
+                        ||StringUtils.isBlank(contactPhone+"") || contactPhone == null
+                        ||StringUtils.isBlank(size+"") || size == null
+                        ||StringUtils.isBlank(enterpriseNature+"") || enterpriseNature == null
+                        ||StringUtils.isBlank(businessLicence+"") || businessLicence == null
+                        ||StringUtils.isBlank(organizationCodeCertificate+"") || organizationCodeCertificate == null
+                        ||StringUtils.isBlank(businessContactCard+"") || businessContactCard == null
+                        ||StringUtils.isBlank(taxRegistrationCertificate+"") || taxRegistrationCertificate == null
+                        ||StringUtils.isBlank(password+"") || password == null){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var user = context.databaseLoader.getEntityByCondition(AcctUser,"username = '"+email+"'");
+            if(user!=null){
+                result.put(Constants.ERROR_CODE,Constants.ERROR_USER_EXIST);
+                result.put(Constants.MESSAGE,i18n.get("user_exist"));
+            }else {
+                var uuidCode = Utils.generateUUID;
+                var String meshCompany = MeshManager.getInstance.createCompany(name+"",uuidCode,"en");
+                if(null == meshCompany){
+                    result.put(Constants.ERROR_CODE,Constants.ERROR_COMPANY_EROR);
+                    result.put(Constants.MESSAGE,i18n.get("company_error"));
+                }else{
+                    var jsonObject = new JSONObject(meshCompany);
+                    var String uuid = jsonObject.getString("uuid");
+                    var newUser = context.databaseLoader.ceateNew(AcctUser);
+                    newUser.uniqueid = uuid;
+                    newUser.username = email+"";
+                    newUser.category = Constants.COMPANY;
+                    newUser.password = MD5.GetMD5Code(password+"");
+                    newUser.status = Constants.VERIFING;
+                    newUser.type = uuidCode;
+                    newUser.createTime = new Date();
+                    newUser.upload = 0;
+                    var company = context.databaseLoader.ceateNew(AcctUserCompany);
+                    company.uniqueid = Utils.generateUUID;
+                    company.userUniqueid = uuid;
+                    company.name = name+"";
+                    company.email = email+"";
+                    company.brandName = brandName+"";
+                    company.brandNum = brandNum +"";
+                    company.size = size+"";
+                    company.telephone = telephone +"";
+                    company.connectTelephone = contactPhone+"";
+                    company.address = address+"";
+                    company.registionPlace = registionPlace+"";
+                    company.enterpriseNature = enterpriseNature+"";
+                    company.businessLicence = businessLicence+"";
+                    company.organizationCodeCertificate = organizationCodeCertificate+"";
+                    company.businessContactCard = businessContactCard+"";
+                    company.taxRegistrationCertificate = taxRegistrationCertificate+"";
+                    context.databaseLoader.commit;
+                    result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+                }
+            }
+        }
+        return result;
+    }
+}

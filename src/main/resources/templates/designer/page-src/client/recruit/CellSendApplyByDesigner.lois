@@ -1,0 +1,51 @@
+package client.service.mobile
+
+import cn.smartx.core.model.JellyInjectBase
+import org.apache.commons.lang3.StringUtils
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+import com.aolc.designer.MstApplyMapping
+import com.aolc.designer.utils.Utils
+import java.util.Date
+import com.aolc.designer.AcctUser
+import com.aolc.designer.MstRecruit
+
+PAGE CellSendApplyByDesigner(title="发送应聘",path="branch") extends JellyInjectBase{
+    EVENT SERVICE{
+        var result = new HashMap();
+        var jobUniqueid = request.get("job_uniqueid");
+        if(jobUniqueid == null || StringUtils.isBlank(jobUniqueid+"")){
+            result.put(Constants.ERROR_CODE,Constants.ERROR_PARAM_INCORRECT);
+            result.put(Constants.MESSAGE,i18n.get("param_incorrect"));
+        }else{
+            var userUniqueid = session.getAttribute("uniqueid");
+            var applyInfo = context.databaseLoader.getEntityByCondition(MstApplyMapping,"userUniqueid = '"+userUniqueid+"' and jobUniqueid ='"+jobUniqueid+"'");
+            if(applyInfo==null){
+                var user = context.databaseLoader.getEntityByCondition(AcctUser,"uniqueid = '"+userUniqueid+"'");
+                var job = context.databaseLoader.getEntityByCondition(MstRecruit,"uniqueid ='"+jobUniqueid+"'")
+                if(user == null || job == null){
+                    result.put(Constants.ERROR_CODE,Constants.ERROR_SEND_APPLY_ERROR);
+                    result.put(Constants.MESSAGE,i18n.get("send_apply_user_or_job_not_exit"));
+                }else if(user.category == Constants.COMPANY){
+                    result.put(Constants.ERROR_CODE,Constants.ERROR_SEND_APPLY_ERROR);
+                    result.put(Constants.MESSAGE,i18n.get("send_apply_user_type_error"));
+                }else{
+                    var apply = context.databaseLoader.ceateNew(MstApplyMapping);
+                    apply.uniqueid = Utils.generateUUID;
+                    apply.userUniqueid = userUniqueid+"";
+                    apply.jobUniqueid = jobUniqueid+"";
+                    apply.createTime = new Date();
+                    apply.isSendByCompany = 0;
+                    apply.status = Constants.VERIFING;
+                    context.submit;
+                    result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+                }
+            }else{
+                result.put(Constants.ERROR_CODE,Constants.ERROR_SEND_APPLY_ERROR);
+                result.put(Constants.MESSAGE,i18n.get("send_apply_error"));
+            }
+
+        }
+        return result;
+    }
+}

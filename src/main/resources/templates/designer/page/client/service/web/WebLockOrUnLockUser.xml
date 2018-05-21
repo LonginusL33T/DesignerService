@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="WebLockOrUnLockUser" title="锁定/解锁用户" checktoken="true"  jellyinject="client.service.web.WebLockOrUnLockUser"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

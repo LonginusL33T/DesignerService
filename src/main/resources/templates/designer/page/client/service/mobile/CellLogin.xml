@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="CellLogin" title="用户登录" path="branch"  jellyinject="client.service.mobile.CellLogin"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

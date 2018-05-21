@@ -1,0 +1,42 @@
+package client.service.web
+
+import cn.smartx.core.model.akka.JellyInjectAkka
+import cn.smartx.core.AAA.SmartxSecurityManager
+import cn.smartx.core.ui.tree.Node
+import cn.smartx.core.AAA.model.Permission
+import java.util.Set
+import java.util.HashSet
+import com.aolc.designer.utils.Utils
+import cn.smartx.core.model.JellyInjectBase
+import java.util.HashMap
+import com.aolc.designer.utils.Constants
+
+PAGE WebGetPermissions(title="获取权限列表", checktoken="true") extends JellyInjectBase{
+    EVENT SERVICE{
+        var rolesid = request.get("roleSid");
+        var permessionsAll = SmartxSecurityManager.getInstance.getPermissionService(context.appCode).listAll;
+        var Node root = new Node();
+        if(rolesid == null){
+            //计算用的容器
+            for(Permission p : permessionsAll) {
+                Utils.addToNode(root, p.getName(), p.getName(), p.getPermissionSid+"", null);
+            }
+        }else{
+            var roleService = SmartxSecurityManager.getInstance.getRoleService(context.appCode);
+            var role = roleService.findRoleBySid(Integer.parseInt(rolesid+""));
+            var permissions = roleService.getPermissions(role);
+            var Set<String> permissionSet = new HashSet();
+            for(permission:permissions){
+                permissionSet.add(permission.name);
+            }
+            //计算用的容器
+            for(Permission p : permessionsAll) {
+                Utils.addToNode(root, p.getName(), p.getName(), p.getPermissionSid+"", permissionSet);
+            }
+        }
+        var result = new HashMap();
+        result.put(Constants.ERROR_CODE,Constants.SUCCESS);
+        result.put("permissions",root.children);
+        return result;
+    }
+}

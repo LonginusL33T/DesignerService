@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="CellAvatarUpdate" title="更新用户头像" path="branch"  jellyinject="client.service.mobile.CellAvatarUpdate"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>

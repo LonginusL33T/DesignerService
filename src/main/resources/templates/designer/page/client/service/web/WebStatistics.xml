@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page code="WebStatistics" title="数据统计" path="branch"  jellyinject="client.service.web.WebStatistics"><event when="service"><![CDATA[_jelly.event_service()]]></event></page>
